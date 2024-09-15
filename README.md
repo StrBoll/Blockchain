@@ -1,6 +1,3 @@
-# Blockchain
-
-
 Blockchain Project 
 
 By Phillip Boll
