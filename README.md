@@ -13,8 +13,29 @@ This library is used for the encryption in the blockchain. I am using SHA256, th
 
 
 
+Hashing (SHA256):
+--------------------------
 
+1. SHA256 is the cryptographic hashing function, the same used in cryptocurrencies like Bitcoin. 
+2. Some of the characteristics are the following:
+    2a. Fixed Length: Output is always a 64 char hex 
+    2b. The same input produces the same output, always
+    2c. Small changes in input will cause majorly different output
+    2d. You cannot reverse engineer it 
+    2e. Every output is unique to its input(no two inputs create same output)
 
+3. So how is it used in this project? (rhetorical question) :
+    3a. Previous Block Hash
+    3b. Transaction history
+    3c. Nonce 
+    
+    These are all used to determine a unique hash 
+
+4. We combine the previous hash, nonce, timestamp and other data available into a string. Then the SHA256 algorithm is used to hash the string. The result is a unique identification we can use to find the block and link it in the chain. 
+
+5. If any block is changed, the hash will also change making it immune to hacking since this will invalidate the block chain. 
+
+6. What you're probably thinking: "WOW phillip, you explained this so well!!!" 
 
 
 
