@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
-
+#include <ctime>
+#include <sstream>
 using namespace std;
 
 // A structure to represent each block in the blockchain
@@ -9,13 +10,15 @@ struct Block {
     Block* prev;
     string prevHash; 
     string Hash;
+    string data;
     int nonce;
-    string transactions;
+    time_t transactions;
 
-    Block(string hash, int Nonce, string transactions) {
-        this->Hash = hash;
+    Block(string prevhash, int Nonce, string Data) {
+        this->prevHash = prevhash;
         this->nonce = Nonce;
-        this->transactions = transactions; 
+        this->data = Data;
+        this->transactions = time(0);  // the current time at which the block is created 
         next = nullptr;
         prev = nullptr;
     }
@@ -35,19 +38,28 @@ public:
     }
 
     // Append a block to the end of the blockchain
-    void AppendBlock(string insertHash, int insertNonce, string insertTransactions) {
-        Block* newNode = new Block(insertHash, insertNonce, insertTransactions);
-
+    void AppendBlock(string data, int insertNonce) {
+        string previousHash = (tail == nullptr) ? "0" : tail->Hash; // if tail is empty then 0, else tail's hash value
+        Block* newBlock = new Block(previousHash, insertNonce, data);
         if (head == nullptr) {
-            head = newNode;
-            tail = newNode;
+            head = newBlock;
+            tail = newBlock;
         } else {
-            tail->next = newNode;
-            newNode->prev = tail;
-            tail = newNode;
+            tail->next = newBlock;
+            newBlock->prev = tail;
+            tail = newBlock;
         }
 
-        cout << "Successfully inserted block with hash: " << insertHash << endl;
+
+        // BELOW CODE IS SIMULATION OF HASH CREATION : TEMPORARY UNTIL WE HAVE IMPLEMENTED HASHING SYSTEM:
+
+        stringstream temporary;
+        temporary << newBlock->transactions << newBlock->nonce;
+        newBlock->Hash = temporary.str();
+        cout << "Block added with hash: " << newBlock->Hash << endl;
+
+
+        cout << "Successfully inserted block with hash: " << newBlock->Hash << endl;
     }
 
     // Print all blocks in the blockchain
@@ -136,9 +148,9 @@ int main() {
     BlockChain blockchain;
 
     // Adding some blocks to the blockchain
-    blockchain.AppendBlock("hash1", 1, "2023-01-01T12:00:00Z");
-    blockchain.AppendBlock("hash2", 2, "2023-02-01T12:00:00Z");
-    blockchain.AppendBlock("hash3", 3, "2023-03-01T12:00:00Z");
+    blockchain.AppendBlock("Vote: Donald Trump", 1);
+    blockchain.AppendBlock("Vote: Kamala Harris", 2);
+    blockchain.AppendBlock("Vote: Robert Kennedy Jr.", 3);
 
     // Print the blockchain
     blockchain.printChain();
