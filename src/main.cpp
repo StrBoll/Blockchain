@@ -1,10 +1,37 @@
 #include <iostream>
 #include <string>
 #include <ctime>
-#include <sstream>
+#include <openssl/sha.h>
 using namespace std;
 
-// A structure to represent each block in the blockchain
+
+string HexIt(const string& input) {
+    const char* hexAlphabet = "0123456789abcdef";
+    string output;
+    
+    for (auto character : input) {
+        unsigned char byte = static_cast<unsigned char>(character);
+        output.push_back(hexAlphabet[(byte >> 4) & 0xF]); 
+        output.push_back(hexAlphabet[byte & 0xF]);        
+    }
+    
+    return output;
+}
+
+
+string compute256(const string& input){
+
+    unsigned char hash[SHA256_DIGEST_LENGTH];
+    SHA256_CTX sha256;
+    SHA256_Init(&sha256);
+    SHA256_Update(&sha256, input.c_str(), input.size());
+    SHA256_Final(hash, &sha256);
+
+    return HexIt(hash);
+}
+
+
+
 struct Block {
     Block* next;
     Block* prev;
@@ -24,20 +51,20 @@ struct Block {
     }
 };
 
-// Class to manage the blockchain (doubly linked list of blocks)
+
 class BlockChain {
 private:
     Block* head;
     Block* tail;
 
 public: 
-    // Constructor initializes an empty blockchain
+    
     BlockChain() {
         head = nullptr;
         tail = nullptr;
     }
 
-    // Append a block to the end of the blockchain
+    
     void AppendBlock(string data, int insertNonce) {
         string previousHash = (tail == nullptr) ? "0" : tail->Hash; // if tail is empty then 0, else tail's hash value
         Block* newBlock = new Block(previousHash, insertNonce, data);
@@ -51,13 +78,7 @@ public:
         }
 
 
-        // BELOW CODE IS SIMULATION OF HASH CREATION : TEMPORARY UNTIL WE HAVE IMPLEMENTED HASHING SYSTEM:
-
-        stringstream temporary;
-        temporary << newBlock->transactions << newBlock->nonce;
-        newBlock->Hash = temporary.str();
-        cout << "Block added with hash: " << newBlock->Hash << endl;
-
+        
 
         cout << "Successfully inserted block with hash: " << newBlock->Hash << endl;
     }
