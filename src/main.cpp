@@ -5,14 +5,13 @@
 using namespace std;
 
 
-string HexIt(const string& input) {
+string HexIt(const unsigned char* inputStr, size_t length) {
     const char* hexAlphabet = "0123456789abcdef";
     string output;
     
-    for (auto character : input) {
-        unsigned char byte = static_cast<unsigned char>(character);
-        output.push_back(hexAlphabet[(byte >> 4) & 0xF]); 
-        output.push_back(hexAlphabet[byte & 0xF]);        
+    for (size_t i = 0; i < length; i++) {
+        output.push_back(hexAlphabet[(input[i] >> 4) & 0xF]);
+        output.push_back(hexAlphabet[input[i] & 0xF]);       
     }
     
     return output;
@@ -21,15 +20,16 @@ string HexIt(const string& input) {
 
 string compute256(const string& input){
 
-    unsigned char hash[SHA256_DIGEST_LENGTH];
+   unsigned char hash[SHA256_DIGEST_LENGTH];
     SHA256_CTX sha256;
     SHA256_Init(&sha256);
     SHA256_Update(&sha256, input.c_str(), input.size());
     SHA256_Final(hash, &sha256);
 
-    return HexIt(hash);
-}
+    
 
+    return HexIt(hash, SHA256_DIGEST_LENGTH);
+}
 
 
 struct Block {
