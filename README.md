@@ -27,3 +27,27 @@ Transactions (timestamps):
 3. The "T" separates the date from the time 
 4. The "Z" at the end of the time is to denote what time zone it is. We are using UTC (Universal Timezone Coordinates)
 5. The purpose of timestamps is to keep track of transactions which is why each block in the blockchain contains a list of transactional timestamps
+
+
+WARNING: Transactions are not in a readable format unless you convert them with ctime function, for example they'll pop up like this: 
+-----------------------------------------------------
+
+Transactions: 1726520457
+
+
+You can read them with this if you'd like:
+ctime(&(current->transactions));
+
+
+
+
+
+
+How I create my executables (This depends on your system since OpenSSL gets tricky depending on where your computer stores it):
+-----------------------------------------------------
+
+
+g++ -o exec main.cpp -I/opt/homebrew/opt/openssl@3/include -L/opt/homebrew/opt/openssl@3/lib -lssl -lcrypto
+
+
+./exec
