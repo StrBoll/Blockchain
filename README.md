@@ -18,7 +18,6 @@ This library is used for the encryption in the blockchain. I am using SHA256, th
 
 
 
-
 Transactions (timestamps):
 ---------------------------
 
