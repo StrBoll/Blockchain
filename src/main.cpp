@@ -5,7 +5,7 @@
 using namespace std;
 
 
-string HexIt(const unsigned char* inputStr, size_t length) {
+string HexIt(const unsigned char* input, size_t length) {
     const char* hexAlphabet = "0123456789abcdef";
     string output;
     
@@ -48,6 +48,8 @@ struct Block {
         this->transactions = time(0);  // the current time at which the block is created 
         next = nullptr;
         prev = nullptr;
+        this->Hash = setHash();
+        
     }
 
 
@@ -82,6 +84,8 @@ public:
             newBlock->prev = tail;
             tail = newBlock;
         }
+
+       
 
 
         
