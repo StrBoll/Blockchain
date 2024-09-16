@@ -49,6 +49,12 @@ struct Block {
         next = nullptr;
         prev = nullptr;
     }
+
+
+    string setHash() const {
+        string blockData = prevHash + to_string(nonce) + to_string(transactions) + data;
+        return compute256(blockData);
+    }
 };
 
 
