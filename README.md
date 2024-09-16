@@ -51,3 +51,20 @@ g++ -o exec main.cpp -I/opt/homebrew/opt/openssl@3/include -L/opt/homebrew/opt/o
 
 
 ./exec
+
+
+
+
+POW (Proof of Work ):
+-----------------------------------------------------
+
+1. For this project, proof of work will usually be set to an easy-medium level since we want to simply showcase my understanding of how blockchain works 
+
+2. For those who don't understand POW, the more leading 0's you have in your hash requirements, the harder it becomes for your program to generate a valid hash 
+
+3. Easy Difficulty hashes usually have between 1 and 3 leading zeros. 3 leading zeros means only 1 in 4,096 hashes are going to be valid for adding a block to the blockchain
+
+4. Medium Difficulty is between 4 and 6 leading zeros. 6 leading zeros means only 1 in over 16 million hashes will be valid. 
+
+5. Hard Difficulty is between 7 and 9 leading zeros. 9 leading zeros means only 1 in over 68 billion (WOW) hashes will be valid for the blockchain. 
+
