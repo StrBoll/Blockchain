@@ -37,6 +37,23 @@ int adjustDifficulty(Block* prevBlock, Block* currentBlock, int currentDifficult
 
 
 }   
+
+
+bool validHash(const string& hash, int difficulty){
+    int i = 0;
+    for (auto character : hash){
+        if (character == '0'){
+            i++;
+        }
+        else {
+            break;
+        }
+
+    }
+
+    return i == difficulty;
+}
+
 string HexIt(const unsigned char* input, size_t length) {
     const char* hexAlphabet = "0123456789abcdef";
     string output;
