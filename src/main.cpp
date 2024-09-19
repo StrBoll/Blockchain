@@ -5,6 +5,38 @@
 using namespace std;
 
 
+
+int adjustDifficulty(Block* prevBlock, Block* currentBlock, int currentDifficulty, int target){
+    time_t currentTime = currentBlock->transactions - prevBlock->transactions; // find time diference
+    double calculateTarget = currentTime / 60.0; // calculates current time but in minutes 
+    int total = static_cast<int>(calculateTarget - target);
+    
+    // Base Case
+
+    if (total >= -2 && total <= 2){
+        return currentDifficulty; 
+    }
+
+    if (total > 2){
+        return adjustDifficulty(prevBlock, currentBlock, currentDifficulty - 1, target);
+
+    }
+    
+    if (total < -2){
+        return adjustDifficulty(prevBlock, currentBlock, currentDifficulty + 1, target);
+    }
+
+
+    
+
+    return currentDifficulty; 
+
+
+
+    
+
+
+}   
 string HexIt(const unsigned char* input, size_t length) {
     const char* hexAlphabet = "0123456789abcdef";
     string output;
@@ -20,6 +52,7 @@ string HexIt(const unsigned char* input, size_t length) {
 
 string compute256(const string& input){
 
+// Deprecated, newer EVP API is available but since this is just a project I'm doing for learning about blockchain I figured it didn't matter
    unsigned char hash[SHA256_DIGEST_LENGTH];
     SHA256_CTX sha256;
     SHA256_Init(&sha256);
@@ -176,6 +209,10 @@ public:
 };
 
 int main() {
+
+
+    
+
     BlockChain blockchain;
 
     // Adding some blocks to the blockchain
