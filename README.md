@@ -11,6 +11,12 @@ one of the first things you must do before attempting to run it is to install th
 This library is used for the encryption in the blockchain. I am using SHA256, the most up-to-date 512 bit encryption
 
 
+Single vs Multi Threading
+--------------------------
+1. The goal for this program is to achieve multi threading during mining of blocks in the blockchain
+2. Multi threading is essentially where we run multiple asepcts of this program on different processors side by side
+3. Multi threading is necessary for blockchain especially when the difficulty of finding hashes increases past 2-3 leading zeroes 
+4. At the current time (Thu Sep 19th) this program uses single threading to mine blocks, this may not be the case anymore depending on when you are reading 
 
 
 Hashing (SHA256):
