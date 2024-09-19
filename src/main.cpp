@@ -54,6 +54,9 @@ bool validHash(const string& hash, int difficulty){
     return i == difficulty;
 }
 
+
+int mineBlock(string prevHash, string data, int difficulty){}
+
 string HexIt(const unsigned char* input, size_t length) {
     const char* hexAlphabet = "0123456789abcdef";
     string output;
