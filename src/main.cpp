@@ -6,7 +6,7 @@
 using namespace std;
 
 
-int mineBlock(string prevHash, string data, int difficulty);
+int mineBlock(string prevHash, string data, int difficulty, string& returnHash);
 int adjustDifficulty(struct Block* prevBlock, struct Block* currentBlock, int currentDifficulty, int target);
 string compute256(const string& input);
 
@@ -22,22 +22,18 @@ struct Block {
 
     Block(string prevhash, string Data, int difficulty) {
         this->prevHash = prevhash;
-        this->nonce = mineBlock(prevHash, Data, difficulty);
+        string returnHash;
+        this->nonce = mineBlock(prevHash, Data, difficulty, returnHash);
         this->data = Data;
         this->transactions = time(0);  // the current time at which the block is created 
         next = nullptr;
         prev = nullptr;
-        this->Hash = setHash();
+        this->Hash = returnHash;
 
         
         
     }
 
-
-    string setHash() const {
-        string blockData = prevHash + to_string(nonce) + to_string(transactions) + data;
-        return compute256(blockData);
-    }
 };
 
 bool validHash(const string& hash, int difficulty){
@@ -56,7 +52,7 @@ bool validHash(const string& hash, int difficulty){
 }
 
 
-int mineBlock(string prevHash, string data, int difficulty){
+int mineBlock(string prevHash, string data, int difficulty, string& returnHash){
     int nonce = 0; 
     string temporaryHash; 
 
@@ -66,10 +62,12 @@ int mineBlock(string prevHash, string data, int difficulty){
         nonce++;
     } while (!validHash(temporaryHash, difficulty));
 
+    returnHash = temporaryHash;
+
     cout << "Valid hash found at: " << temporaryHash << endl;
 
 
-    return nonce;
+    return nonce -1;
 }
 
 string HexIt(const unsigned char* input, size_t length) {
@@ -106,7 +104,7 @@ private:
     
 public: 
 
-    int difficulty = 3; // number of leading zeros required in hash 
+    int difficulty = 4; // number of leading zeros required in hash 
     int target = 2; // time to mine in minutes
     
     BlockChain() {
