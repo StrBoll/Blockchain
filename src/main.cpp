@@ -2,6 +2,7 @@
 #include <string>
 #include <ctime>
 #include <openssl/sha.h>
+#include <chrono>
 
 using namespace std;
 
@@ -104,7 +105,7 @@ private:
     
 public: 
 
-    int difficulty = 4; // number of leading zeros required in hash 
+    int difficulty = 7; // number of leading zeros required in hash 
     int target = 2; // time to mine in minutes
     
     BlockChain() {
@@ -257,10 +258,38 @@ int main() {
 
     BlockChain blockchain;
     
-    blockchain.AppendBlock("Vote: Alice");
-    blockchain.AppendBlock("Vote: Bob");
-    blockchain.AppendBlock("Vote: Charlie");
+    cout << "Mining block 1... " << endl;
+    cout << "\n";
+    auto start = chrono::high_resolution_clock::now();
+    blockchain.AppendBlock("Vote: Donald Trump");
+    auto end = chrono::high_resolution_clock::now();
+    chrono::duration<double> elapsed = end - start;
+    cout << "Block 1 took: " << elapsed.count() << " seconds to mine " <<endl; 
+    cout << "\n";
 
+    cout << "Mining block 2... " << endl;
+    cout << "\n";
+
+    start = chrono::high_resolution_clock::now();
+    blockchain.AppendBlock("Vote: Kamala Harris");
+    end = chrono::high_resolution_clock::now();
+    elapsed = end - start;
+    cout << "Block 2 took: " << elapsed.count() << " seconds to mine " <<endl; 
+    cout << "\n";
+
+    cout << "Mining block 3... " << endl;
+    cout << "\n";
+
+    start = chrono::high_resolution_clock::now();
+    blockchain.AppendBlock("Vote: Barack Obama");
+    end = chrono::high_resolution_clock::now();
+    elapsed = end - start;
+    cout << "\n";
+    cout << "Block 3 took: " << elapsed.count() << " seconds to mine " <<endl; 
+
+
+    
+    cout << "\n";
     cout << "Is blockchain valid? " << (blockchain.validateChain() ? "Yes" : "No") << endl;
 
     return 0; 
