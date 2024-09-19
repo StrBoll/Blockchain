@@ -2,42 +2,43 @@
 #include <string>
 #include <ctime>
 #include <openssl/sha.h>
+
 using namespace std;
 
 
+int mineBlock(string prevHash, string data, int difficulty);
+int adjustDifficulty(struct Block* prevBlock, struct Block* currentBlock, int currentDifficulty, int target);
+string compute256(const string& input);
 
-int adjustDifficulty(Block* prevBlock, Block* currentBlock, int currentDifficulty, int target){
-    time_t currentTime = currentBlock->transactions - prevBlock->transactions; // find time diference
-    double calculateTarget = currentTime / 60.0; // calculates current time but in minutes 
-    int total = static_cast<int>(calculateTarget - target);
-    
-    // Base Case
 
-    if (total >= -2 && total <= 2){
-        return currentDifficulty; 
+struct Block {
+    Block* next;
+    Block* prev;
+    string prevHash; 
+    string Hash;
+    string data;
+    int nonce;
+    time_t transactions;
+
+    Block(string prevhash, string Data, int difficulty) {
+        this->prevHash = prevhash;
+        this->nonce = mineBlock(prevHash, Data, difficulty);
+        this->data = Data;
+        this->transactions = time(0);  // the current time at which the block is created 
+        next = nullptr;
+        prev = nullptr;
+        this->Hash = setHash();
+
+        
+        
     }
 
-    if (total > 2){
-        return adjustDifficulty(prevBlock, currentBlock, currentDifficulty - 1, target);
 
+    string setHash() const {
+        string blockData = prevHash + to_string(nonce) + to_string(transactions) + data;
+        return compute256(blockData);
     }
-    
-    if (total < -2){
-        return adjustDifficulty(prevBlock, currentBlock, currentDifficulty + 1, target);
-    }
-
-
-    
-
-    return currentDifficulty; 
-
-
-
-    
-
-
-}   
-
+};
 
 bool validHash(const string& hash, int difficulty){
     int i = 0;
@@ -55,7 +56,21 @@ bool validHash(const string& hash, int difficulty){
 }
 
 
-int mineBlock(string prevHash, string data, int difficulty){}
+int mineBlock(string prevHash, string data, int difficulty){
+    int nonce = 0; 
+    string temporaryHash; 
+
+    do {
+        string input = prevHash + data + to_string(nonce);
+        temporaryHash = compute256(input);
+        nonce++;
+    } while (!validHash(temporaryHash, difficulty));
+
+    cout << "Valid hash found at: " << temporaryHash << endl;
+
+
+    return nonce;
+}
 
 string HexIt(const unsigned char* input, size_t length) {
     const char* hexAlphabet = "0123456789abcdef";
@@ -84,41 +99,15 @@ string compute256(const string& input){
     return HexIt(hash, SHA256_DIGEST_LENGTH);
 }
 
-
-struct Block {
-    Block* next;
-    Block* prev;
-    string prevHash; 
-    string Hash;
-    string data;
-    int nonce;
-    time_t transactions;
-
-    Block(string prevhash, int Nonce, string Data) {
-        this->prevHash = prevhash;
-        this->nonce = Nonce;
-        this->data = Data;
-        this->transactions = time(0);  // the current time at which the block is created 
-        next = nullptr;
-        prev = nullptr;
-        this->Hash = setHash();
-        
-    }
-
-
-    string setHash() const {
-        string blockData = prevHash + to_string(nonce) + to_string(transactions) + data;
-        return compute256(blockData);
-    }
-};
-
-
 class BlockChain {
 private:
     Block* head;
     Block* tail;
-
+    
 public: 
+
+    int difficulty = 3; // number of leading zeros required in hash 
+    int target = 2; // time to mine in minutes
     
     BlockChain() {
         head = nullptr;
@@ -126,9 +115,10 @@ public:
     }
 
     
-    void AppendBlock(string data, int insertNonce) {
+    void AppendBlock(string data) {
         string previousHash = (tail == nullptr) ? "0" : tail->Hash; // if tail is empty then 0, else tail's hash value
-        Block* newBlock = new Block(previousHash, insertNonce, data);
+
+        Block* newBlock = new Block(previousHash, data, difficulty);
         if (head == nullptr) {
             head = newBlock;
             tail = newBlock;
@@ -138,7 +128,10 @@ public:
             tail = newBlock;
         }
 
-       
+        
+       if (newBlock->prev != nullptr){
+        difficulty = adjustDifficulty(newBlock->prev, newBlock, difficulty, target);
+       }
 
 
         
@@ -228,37 +221,49 @@ public:
     }
 };
 
-int main() {
+
+int adjustDifficulty(Block* prevBlock, Block* currentBlock, int currentDifficulty, int target){
+    time_t currentTime = currentBlock->transactions - prevBlock->transactions; // find time diference
+    double calculateTarget = currentTime / 60.0; // calculates current time but in minutes 
+    int total = static_cast<int>(calculateTarget - target);
+    
+    // Base Case
+
+    if (total >= -2 && total <= 2){
+        return currentDifficulty; 
+    }
+
+    if (total > 2){
+        return adjustDifficulty(prevBlock, currentBlock, currentDifficulty - 1, target);
+
+    }
+    
+    if (total < -2){
+        return adjustDifficulty(prevBlock, currentBlock, currentDifficulty + 1, target);
+    }
 
 
     
 
+    return currentDifficulty; 
+
+
+
+    
+
+
+}   
+
+int main() {
+
+
     BlockChain blockchain;
+    
+    blockchain.AppendBlock("Vote: Alice");
+    blockchain.AppendBlock("Vote: Bob");
+    blockchain.AppendBlock("Vote: Charlie");
 
-    // Adding some blocks to the blockchain
-    blockchain.AppendBlock("Vote: Donald Trump", 1);
-    blockchain.AppendBlock("Vote: Kamala Harris", 2);
-    blockchain.AppendBlock("Vote: Robert Kennedy Jr.", 3);
+    cout << "Is blockchain valid? " << (blockchain.validateChain() ? "Yes" : "No") << endl;
 
-    // Print the blockchain
-    blockchain.printChain();
-
-    // Validate the chain
-    if (blockchain.validateChain()) {
-        cout << "Blockchain is valid." << endl;
-    } else {
-        cout << "Blockchain is invalid." << endl;
-    }
-
-    // Delete a block
-    if (blockchain.deleteBlock("hash2")) {
-        cout << "Block with hash2 deleted successfully." << endl;
-    } else {
-        cout << "Block with hash2 not found." << endl;
-    }
-
-    // Print the blockchain again
-    blockchain.printChain();
-
-    return 0;
+    return 0; 
 }
