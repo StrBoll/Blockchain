@@ -3,6 +3,8 @@
 #include <ctime>
 #include <openssl/sha.h>
 #include <chrono>
+#include <thread> 
+#include <vector>
 
 using namespace std;
 
@@ -24,6 +26,7 @@ struct Block {
     Block(string prevhash, string Data, int difficulty) {
         this->prevHash = prevhash;
         string returnHash;
+        
         this->nonce = mineBlock(prevHash, Data, difficulty, returnHash);
         this->data = Data;
         this->transactions = time(0);  // the current time at which the block is created 
@@ -105,12 +108,16 @@ private:
     
 public: 
 
-    int difficulty = 7; // number of leading zeros required in hash 
-    int target = 2; // time to mine in minutes
+    int difficulty = 5; // number of leading zeros required in hash 
+    int target = 60; 
     
     BlockChain() {
         head = nullptr;
         tail = nullptr;
+    }
+
+    Block* getTail(){
+        return tail;
     }
 
     
@@ -167,15 +174,15 @@ public:
         return nullptr; // If block not found
     }
 
-    // Validate the blockchain (check if each block's prevHash matches the previous block's Hash)
+
     bool validateChain() {
         Block* current = head;
 
         if (current == nullptr || current->next == nullptr) {
-            return true; // Empty or single block chains are valid
+            return true; 
         }
 
-        current = current->next; // Start from the second block
+        current = current->next; 
         while (current != nullptr) {
             if (current->prevHash != current->prev->Hash) {
                 return false;
@@ -223,21 +230,21 @@ public:
 
 int adjustDifficulty(Block* prevBlock, Block* currentBlock, int currentDifficulty, int target){
     time_t currentTime = currentBlock->transactions - prevBlock->transactions; // find time diference
-    double calculateTarget = currentTime / 60.0; // calculates current time but in minutes 
+    double calculateTarget = currentTime; // calculates current time but in minutes 
     int total = static_cast<int>(calculateTarget - target);
     
     // Base Case
 
-    if (total >= -2 && total <= 2){
+    if (total >= -60 && total <= 60){
         return currentDifficulty; 
     }
 
-    if (total > 2){
+    if (total > 60){
         return adjustDifficulty(prevBlock, currentBlock, currentDifficulty - 1, target);
 
     }
     
-    if (total < -2){
+    if (total < -60){
         return adjustDifficulty(prevBlock, currentBlock, currentDifficulty + 1, target);
     }
 
@@ -277,6 +284,11 @@ int main() {
     cout << "Block 2 took: " << elapsed.count() << " seconds to mine " <<endl; 
     cout << "\n";
 
+    cout << "Previous Difficulty (leading zeros): " << blockchain.difficulty << endl;
+    blockchain.difficulty = adjustDifficulty(blockchain.getTail()->prev, blockchain.getTail(), blockchain.difficulty, 5);
+    cout << "Updated Difficulty (after calculation of need): " << blockchain.difficulty << endl;
+    cout << "\n";
+
     cout << "Mining block 3... " << endl;
     cout << "\n";
 
@@ -291,6 +303,8 @@ int main() {
     
     cout << "\n";
     cout << "Is blockchain valid? " << (blockchain.validateChain() ? "Yes" : "No") << endl;
+
+
 
     return 0; 
 }

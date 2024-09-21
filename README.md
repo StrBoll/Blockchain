@@ -11,6 +11,8 @@ one of the first things you must do before attempting to run it is to install th
 This library is used for the encryption in the blockchain. I am using SHA256, the most up-to-date 512 bit encryption
 
 
+
+
 Single vs Multi Threading
 --------------------------
 1. The goal for this program is to achieve multi threading during mining of blocks in the blockchain
@@ -94,3 +96,12 @@ POW (Proof of Work ):
 
 5. Hard Difficulty is between 7 and 9 leading zeros. 9 leading zeros means only 1 in over 68 billion (WOW) hashes will be valid for the blockchain. 
 
+
+
+---------------------------------------------------------
+
+The following is an image showing the mining of an 8 leading zeros hash, taking approximately 18 minutes. Anything higher would take hours to day to mine with single threading on a macbook. 
+
+---------------------------------------------------------
+
+![Example Output](./example.png)
