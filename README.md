@@ -104,4 +104,58 @@ The following is an image showing the mining of an 8 leading zeros hash, taking 
 
 ---------------------------------------------------------
 
-![Example Output](./example.png)
+![Example Output](./images/example.png)
+
+
+
+
+
+
+
+
+-----------------------------------------------------
+
+
+USING THE SQL DATABASE (POSTGRESQL):
+
+1. I am using postgresql for my database since it is widely used in industry compared to mysql and supports a broader range of languages
+
+2. Simply put, I created a .cpp and .h file for inserting into the database blocks after mining from our doubly linked list blockchain in c++
+
+3. The following are some simple commands to use if you are new to postgresql:
+
+
+
+Connecting to PostgreSQL: 
+
+psql database   // in this case database is just the name of the database i created
+
+
+
+
+Executing SQL File:
+
+\i path/to/database.sql
+
+\i /Users/phillipboll3/Desktop/Blockchain/
+src/database.sql
+
+
+
+
+
+Verifying that the table was created and exists:
+
+\dt
+
+
+
+
+
+W3 Schools is a great source for learning SQL, I used that school to learn what I know about SQL for this project:
+
+https://www.w3schools.com/sql/sql_create_table.asp
+
+
+
+![Database Insertion](./images/Insertion.png)
