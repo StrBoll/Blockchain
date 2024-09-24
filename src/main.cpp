@@ -319,11 +319,13 @@ int main() {
 
 
    //eraseDB();
-
+    string hash = "null";
    if (blocksPresent() == true){
-    string hash = getLatestHash();
-    cout << hash << endl;
+    hash = getLatestHash();
+
    }
+
+   
 
    
 
