@@ -78,6 +78,21 @@ How I create my executables (This depends on your system since OpenSSL gets tric
 g++ -o exec main.cpp -I/opt/homebrew/opt/openssl@3/include -L/opt/homebrew/opt/openssl@3/lib -lssl -lcrypto
 
 
+
+The most up-to-date executable for using the database:
+------------------------------------------------------
+
+g++ -std=c++17 -o exec main.cpp db.cpp \
+-I/opt/homebrew/opt/openssl@3/include \
+-I/opt/homebrew/opt/postgresql@14/include \
+-I/opt/homebrew/include \
+-L/opt/homebrew/opt/openssl@3/lib \
+-L/opt/homebrew/opt/postgresql@14/lib \
+-L/opt/homebrew/opt/libpqxx/lib \
+-lssl -lcrypto -lpqxx 
+
+
+
 ./exec
 
 
@@ -128,7 +143,9 @@ USING THE SQL DATABASE (POSTGRESQL):
 
 Connecting to PostgreSQL: 
 
-psql database   // in this case database is just the name of the database i created
+psql -d database
+   // in this case database is just the name of the database i created
+
 
 
 
@@ -159,3 +176,29 @@ https://www.w3schools.com/sql/sql_create_table.asp
 
 
 ![Database Insertion](./images/Insertion.png)
+
+
+
+------------------------------------------------
+
+Connecting PostgreSQL to C++ Blockchain:
+
+1. We use another library called pqxx
+2. Pqxx connects the two and allows us to call functions in C++ which insert data directly into our database 
+3. The port, username, and password are required to do so. 
+4. You can check the default port being used by PostgreSQL through the command:
+
+cat $(brew --prefix)/var/postgresql@14/postgresql.conf | grep port
+
+5. The default for me: 5432
+
+
+---------------------------------------------------
+
+Common Workflow for accessing database after running executable:
+
+
+brew services start postgresql@14
+psql -U phillipboll3 -d database
+SELECT * FROM blocks;
+
