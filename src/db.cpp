@@ -80,3 +80,37 @@ bool eraseDB(){
         cerr << e.what() << endl;
     }
 } 
+
+
+string getLatestHash(){
+    try {
+            connection C("dbname=database user=phillipboll3 password=Internship2025 hostaddr=127.0.0.1 port=5432");
+
+            if (C.is_open()){
+                nontransaction N(C);
+                
+
+                string lastBlock = "SELECT current_hash FROM blocks ORDER BY block_number DESC LIMIT 1;";
+
+                result latestHash(N.exec(lastBlock));
+
+                if (!latestHash.empty() && !latestHash[0]["current_hash"].is_null()) {
+                return latestHash[0]["current_hash"].as<string>();
+            } else {
+                cout << "No block found or current_hash is NULL." << endl;
+                return "";  
+            }
+
+
+
+
+
+            
+            }
+
+            
+
+        } catch (const exception &e) {
+        cerr << e.what() << endl;
+    }
+}
