@@ -102,6 +102,8 @@ string compute256(const string& input){
     return HexIt(hash, SHA256_DIGEST_LENGTH);
 }
 
+
+
 class BlockChain {
 private:
     Block* head;
@@ -275,7 +277,7 @@ int main() {
     cout << "Block 1 took: " << elapsed.count() << " seconds to mine " <<endl; 
     cout << "\n";
 
-    blockDB(blockchain.getTail()->prevHash, blockchain.getTail()->Hash, blockchain.getTail()->nonce, blockchain.getTail()->transactions);
+    insertBlockDB(blockchain.getTail()->prevHash, blockchain.getTail()->Hash, blockchain.getTail()->nonce, blockchain.getTail()->transactions);
 
     cout << "Mining block 2... " << endl;
     cout << "\n";
@@ -292,7 +294,7 @@ int main() {
     cout << "Updated Difficulty (after calculation of need): " << blockchain.difficulty << endl;
     cout << "\n";
 
-    blockDB(blockchain.getTail()->prevHash, blockchain.getTail()->Hash, blockchain.getTail()->nonce, blockchain.getTail()->transactions);
+    insetBlockDB(blockchain.getTail()->prevHash, blockchain.getTail()->Hash, blockchain.getTail()->nonce, blockchain.getTail()->transactions);
 
     cout << "Mining block 3... " << endl;
     cout << "\n";
@@ -304,7 +306,7 @@ int main() {
     cout << "\n";
     cout << "Block 3 took: " << elapsed.count() << " seconds to mine " <<endl; 
 
-    blockDB(blockchain.getTail()->prevHash, blockchain.getTail()->Hash, blockchain.getTail()->nonce, blockchain.getTail()->transactions);
+    insertBlockDB(blockchain.getTail()->prevHash, blockchain.getTail()->Hash, blockchain.getTail()->nonce, blockchain.getTail()->transactions);
     
     cout << "\n";
     cout << "Is blockchain valid? " << (blockchain.validateChain() ? "Yes" : "No") << endl;
