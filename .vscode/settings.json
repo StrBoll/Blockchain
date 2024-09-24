@@ -8,6 +8,7 @@
         "vector": "cpp",
         "iomanip": "cpp",
         "stdexcept": "cpp",
-        "__config": "cpp"
+        "__config": "cpp",
+        "ostream": "cpp"
     }
 }
