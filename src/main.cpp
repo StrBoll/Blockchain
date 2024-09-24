@@ -265,8 +265,10 @@ int adjustDifficulty(Block* prevBlock, Block* currentBlock, int currentDifficult
 
 int main() {
 
+    /*
 
     BlockChain blockchain;
+    
     
     cout << "Mining block 1... " << endl;
     cout << "\n";
@@ -294,7 +296,7 @@ int main() {
     cout << "Updated Difficulty (after calculation of need): " << blockchain.difficulty << endl;
     cout << "\n";
 
-    insetBlockDB(blockchain.getTail()->prevHash, blockchain.getTail()->Hash, blockchain.getTail()->nonce, blockchain.getTail()->transactions);
+    insertBlockDB(blockchain.getTail()->prevHash, blockchain.getTail()->Hash, blockchain.getTail()->nonce, blockchain.getTail()->transactions);
 
     cout << "Mining block 3... " << endl;
     cout << "\n";
@@ -312,6 +314,18 @@ int main() {
     cout << "Is blockchain valid? " << (blockchain.validateChain() ? "Yes" : "No") << endl;
 
 
+
+    */
+
+
+   //eraseDB();
+
+   if (blocksPresent() == true){
+    string hash = getLatestHash();
+    cout << hash << endl;
+   }
+
+   
 
     return 0; 
 }
