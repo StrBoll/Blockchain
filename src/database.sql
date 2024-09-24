@@ -8,9 +8,14 @@ CREATE TABLE blocks (
 
 
 CREATE TABLE votes (
-    block_number INT PRIMARY KEY,
+    vote_hash VARCHAR(255),
     voter_registration INT,
-    voter_name VARCHAR(255),
+    voterFirst VARCHAR(255),
+    VoterLast VARCHAR(255),
     candidate_vote VARCHAR(255),
-    FOREIGN KEY (block_number) REFERENCES blocks(block_number)
-);
+     FOREIGN KEY (vote_hash) REFERENCES blocks(current_hash)
+
+
+)
+
+
