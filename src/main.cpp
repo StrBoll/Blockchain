@@ -15,6 +15,7 @@ int adjustDifficulty(struct Block* prevBlock, struct Block* currentBlock, int cu
 string compute256(const string& input);
 
 
+
 struct Block {
     Block* next;
     Block* prev;
@@ -111,7 +112,7 @@ private:
     
 public: 
 
-    int difficulty = 5; // number of leading zeros required in hash 
+    int difficulty = 6; // number of leading zeros required in hash 
     int target = 60; 
     
     BlockChain() {
@@ -265,7 +266,7 @@ int adjustDifficulty(Block* prevBlock, Block* currentBlock, int currentDifficult
 
 int main() {
 
-    /*
+    
 
     BlockChain blockchain;
     
@@ -280,7 +281,7 @@ int main() {
     cout << "\n";
 
     insertBlockDB(blockchain.getTail()->prevHash, blockchain.getTail()->Hash, blockchain.getTail()->nonce, blockchain.getTail()->transactions);
-
+    insertVoteDB("phillip", "Boll", "Donald");
     cout << "Mining block 2... " << endl;
     cout << "\n";
 
@@ -297,7 +298,7 @@ int main() {
     cout << "\n";
 
     insertBlockDB(blockchain.getTail()->prevHash, blockchain.getTail()->Hash, blockchain.getTail()->nonce, blockchain.getTail()->transactions);
-
+    insertVoteDB("Jeff", "Dahmer", "Kamala");
     cout << "Mining block 3... " << endl;
     cout << "\n";
 
@@ -309,23 +310,23 @@ int main() {
     cout << "Block 3 took: " << elapsed.count() << " seconds to mine " <<endl; 
 
     insertBlockDB(blockchain.getTail()->prevHash, blockchain.getTail()->Hash, blockchain.getTail()->nonce, blockchain.getTail()->transactions);
-    
+    insertVoteDB("phillip", "Boll", "DonaldTRUMP");
     cout << "\n";
     cout << "Is blockchain valid? " << (blockchain.validateChain() ? "Yes" : "No") << endl;
 
 
 
-    */
+    
 
 
    //eraseDB();
-    string hash = "null";
+    /*string hash = "null";
    if (blocksPresent() == true){
     hash = getLatestHash();
 
    }
 
-   
+   */
 
    
 

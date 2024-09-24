@@ -11,7 +11,13 @@ bool blocksPresent(); // checks if blocks are in blockchain
 
 bool eraseDB(); // erase everything in database
 
+void insertVoteDB(const std::string& voter_first, const std::string& voter_last, const std::string& candidate);
+
+int lastBlock();
+
 std::string getLatestHash();
+
+int verifyVoters();
 
 
 #endif
