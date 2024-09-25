@@ -47,6 +47,26 @@ Hashing (SHA256):
 
 
 
+Transaction Verification (Merkle Tree Proofs):
+-----------------------------------------------
+
+How we verify transactions via the Merkle Tree
+
+1. The top node in the tree is known as the merkle root
+2. The root is the result of recursive hashing of nodes, if any node changes then the root changes
+3. If any node changes then the transactions have changed
+
+4. To verify a certain transaction, we generate what is known as a Merkle Proof
+5. A merkle Proof consists of hashes which are required to remake the tree from transaction being verified and up to the root again '
+
+6. Using the proof and the hash from the transaction, we remake the root and compare it to the original Merkle Root.
+7. If the roots match, the transaction is verified. 
+
+
+
+
+
+
 Transactions (timestamps):
 ---------------------------
 
@@ -201,4 +221,8 @@ Common Workflow for accessing database after running executable:
 brew services start postgresql@14
 psql -U phillipboll3 -d database
 SELECT * FROM blocks;
+
+
+
+
 
