@@ -274,19 +274,19 @@ int main() {
     cout << "Mining block 1... " << endl;
     cout << "\n";
     auto start = chrono::high_resolution_clock::now();
-    blockchain.AppendBlock("Vote: Donald Trump");
+    blockchain.AppendBlock("Vote: Candidate X");
     auto end = chrono::high_resolution_clock::now();
     chrono::duration<double> elapsed = end - start;
     cout << "Block 1 took: " << elapsed.count() << " seconds to mine " <<endl; 
     cout << "\n";
 
     insertBlockDB(blockchain.getTail()->prevHash, blockchain.getTail()->Hash, blockchain.getTail()->nonce, blockchain.getTail()->transactions);
-    insertVoteDB("phillip", "Boll", "Donald");
+    insertVoteDB("phillip", "Boll", "Candidate X");
     cout << "Mining block 2... " << endl;
     cout << "\n";
 
     start = chrono::high_resolution_clock::now();
-    blockchain.AppendBlock("Vote: Kamala Harris");
+    blockchain.AppendBlock("Vote: Candidate Y");
     end = chrono::high_resolution_clock::now();
     elapsed = end - start;
     cout << "Block 2 took: " << elapsed.count() << " seconds to mine " <<endl; 
@@ -298,7 +298,7 @@ int main() {
     cout << "\n";
 
     insertBlockDB(blockchain.getTail()->prevHash, blockchain.getTail()->Hash, blockchain.getTail()->nonce, blockchain.getTail()->transactions);
-    insertVoteDB("Jeff", "Dahmer", "Kamala");
+    insertVoteDB("Karina", "Santos", "Candidate Y");
     cout << "Mining block 3... " << endl;
     cout << "\n";
 
@@ -310,7 +310,7 @@ int main() {
     cout << "Block 3 took: " << elapsed.count() << " seconds to mine " <<endl; 
 
     insertBlockDB(blockchain.getTail()->prevHash, blockchain.getTail()->Hash, blockchain.getTail()->nonce, blockchain.getTail()->transactions);
-    insertVoteDB("phillip", "Boll", "DonaldTRUMP");
+    insertVoteDB("Adrian", "Kolber", "Candidate Z");
     cout << "\n";
     cout << "Is blockchain valid? " << (blockchain.validateChain() ? "Yes" : "No") << endl;
 
