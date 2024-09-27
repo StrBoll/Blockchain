@@ -18,7 +18,12 @@ Single vs Multi Threading
 1. The goal for this program is to achieve multi threading during mining of blocks in the blockchain
 2. Multi threading is essentially where we run multiple asepcts of this program on different processors side by side
 3. Multi threading is necessary for blockchain especially when the difficulty of finding hashes increases past 2-3 leading zeroes 
-4. At the current time (Thu Sep 19th) this program uses single threading to mine blocks, this may not be the case anymore depending on when you are reading 
+
+
+4. NEW UPDATE, At the current time (Fri Sep 27) Multi threading has been IMPLEMENTED
+
+
+![Example Threading Mining Operation](./images/multithreading.png)
 
 
 Hashing (SHA256):
@@ -102,14 +107,15 @@ g++ -o exec main.cpp -I/opt/homebrew/opt/openssl@3/include -L/opt/homebrew/opt/o
 The most up-to-date executable for using the database:
 ------------------------------------------------------
 
-g++ -std=c++17 -o exec main.cpp db.cpp \
+g++ -std=c++17 -o exec main.cpp db.cpp multithread.cpp \
 -I/opt/homebrew/opt/openssl@3/include \
 -I/opt/homebrew/opt/postgresql@14/include \
 -I/opt/homebrew/include \
 -L/opt/homebrew/opt/openssl@3/lib \
 -L/opt/homebrew/opt/postgresql@14/lib \
 -L/opt/homebrew/opt/libpqxx/lib \
--lssl -lcrypto -lpqxx 
+-lssl -lcrypto -lpqxx
+
 
 
 
