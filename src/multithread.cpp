@@ -7,22 +7,57 @@
 
 using namespace std;
 
+
+Mining::Mining(int numThreads, int difficulty){
+    this->hashFound = false;
+    this->nonceFound = -1;
+    this->numThreads = numThreads;
+    this->difficulty = difficulty;
+
+
+}
+
+void Mining::threading(int threadNum, atomic<int>& sharedNonce, const string& prevHash, const string& data) {
+    string tempHash;
+    
+    while (!done.load()) {  
+        int nonce = sharedNonce.fetch_add(1);  
+        string convert = prevHash + data + to_string(nonce);
+        string tempHash = compute256(convert);
+
+        if (validHash(tempHash)) {
+            lock_guard<mutex> lock(resultMtx);  
+            if (!done.load()) {  
+                done = true;
+                nonceFound = nonce;
+                hashFound = tempHash;
+                cout << "Thread #" << threadNum << " found valid nonce at: " << nonce 
+                     << " with hash: " << tempHash << endl;
+            }
+        }
+    }
+}
+
 int Mining::mineBlock(string prevHash, string data, string& returnHash){
-    int nonce = 0; 
-    string temporaryHash; 
+    vector<thread> threads;
+    atomic<int> sharedNonce(0);
+    int nonce = 0;
+    done = false; 
 
-    do {
-        string input = prevHash + data + to_string(nonce);
-        temporaryHash = compute256(input);
-        nonce++;
-    } while (!validHash(temporaryHash, difficulty));
+    
 
-    returnHash = temporaryHash;
+    for (int i = 0; i < numThreads; ++i){
+        threads.emplace_back(&Mining::threading, this, i, ref(sharedNonce), cref(prevHash), cref(data));
+    }
 
-    cout << "Valid hash found at: " << temporaryHash << endl;
+    for (auto &thread : threads){
+        thread.join();
+    }
+
+    returnHash = hashFound;
+    return nonceFound;
 
 
-    return nonce -1;
 }
 
 string Mining::HexIt(const unsigned char* input, size_t length) {
