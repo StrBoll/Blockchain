@@ -6,14 +6,10 @@
 #include <thread> 
 #include <vector>
 #include "db.h"
-
+#include "multithread.h"
 using namespace std;
 
-
-int mineBlock(string prevHash, string data, int difficulty, string& returnHash);
 int adjustDifficulty(struct Block* prevBlock, struct Block* currentBlock, int currentDifficulty, int target);
-string compute256(const string& input);
-
 
 
 struct Block {
@@ -29,9 +25,10 @@ struct Block {
         this->prevHash = prevhash;
         string returnHash;
         
-        this->nonce = mineBlock(prevHash, Data, difficulty, returnHash);
+        Mining mineIt(4, difficulty);
+        this->nonce = mineIt.mineBlock(prevHash, Data, returnHash);
         this->data = Data;
-        this->transactions = time(0);  // the current time at which the block is created 
+        this->transactions = time(0);  
         next = nullptr;
         prev = nullptr;
         this->Hash = returnHash;
@@ -42,67 +39,6 @@ struct Block {
 
 };
 
-bool validHash(const string& hash, int difficulty){
-    int i = 0;
-    for (auto character : hash){
-        if (character == '0'){
-            i++;
-        }
-        else {
-            break;
-        }
-
-    }
-
-    return i == difficulty;
-}
-
-
-int mineBlock(string prevHash, string data, int difficulty, string& returnHash){
-    int nonce = 0; 
-    string temporaryHash; 
-
-    do {
-        string input = prevHash + data + to_string(nonce);
-        temporaryHash = compute256(input);
-        nonce++;
-    } while (!validHash(temporaryHash, difficulty));
-
-    returnHash = temporaryHash;
-
-    cout << "Valid hash found at: " << temporaryHash << endl;
-
-
-    return nonce -1;
-}
-
-string HexIt(const unsigned char* input, size_t length) {
-    const char* hexAlphabet = "0123456789abcdef";
-    string output;
-    
-    for (size_t i = 0; i < length; i++) {
-        output.push_back(hexAlphabet[(input[i] >> 4) & 0xF]);
-        output.push_back(hexAlphabet[input[i] & 0xF]);       
-    }
-    
-    return output;
-}
-
-
-string compute256(const string& input){
-
-// Deprecated, newer EVP API is available but since this is just a project I'm doing for learning about blockchain I figured it didn't matter
-   unsigned char hash[SHA256_DIGEST_LENGTH];
-    SHA256_CTX sha256;
-    SHA256_Init(&sha256);
-    SHA256_Update(&sha256, input.c_str(), input.size());
-    SHA256_Final(hash, &sha256);
-
-    
-
-    return HexIt(hash, SHA256_DIGEST_LENGTH);
-}
-
 
 
 class BlockChain {
@@ -112,7 +48,7 @@ private:
     
 public: 
 
-    int difficulty = 6; // number of leading zeros required in hash 
+    int difficulty = 7; // number of leading zeros required in hash 
     int target = 60; 
     
     BlockChain() {
@@ -126,7 +62,7 @@ public:
 
     
     void AppendBlock(string data) {
-        string previousHash = (tail == nullptr) ? "0" : tail->Hash; // if tail is empty then 0, else tail's hash value
+        string previousHash = (tail == nullptr) ? "0" : tail->Hash; 
 
         Block* newBlock = new Block(previousHash, data, difficulty);
         if (head == nullptr) {
@@ -149,7 +85,7 @@ public:
         cout << "Successfully inserted block with hash: " << newBlock->Hash << endl;
     }
 
-    // Print all blocks in the blockchain
+    
     void printChain() {
         Block* current = head;
         unsigned int i = 0;
