@@ -48,7 +48,7 @@ private:
     
 public: 
 
-    int difficulty = 7; // number of leading zeros required in hash 
+    int difficulty = 8; // number of leading zeros required in hash 
     int target = 60; 
     
     BlockChain() {

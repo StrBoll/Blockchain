@@ -145,7 +145,19 @@ The following is an image showing the mining of an 8 leading zeros hash, taking 
 
 ---------------------------------------------------------
 
+
+Single Threading Example:
+
+
 ![Example Output](./images/example.png)
+
+
+Multi Threading Now :
+
+
+![8 Leading Zeros with multithreading](./images/8Leading.png)
+
+
 
 
 
