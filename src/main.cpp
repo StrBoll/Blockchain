@@ -25,7 +25,7 @@ struct Block {
         this->prevHash = prevhash;
         string returnHash;
         
-        Mining mineIt(4, difficulty);
+        Mining mineIt(8, difficulty);
         this->nonce = mineIt.mineBlock(prevHash, Data, returnHash);
         this->data = Data;
         this->transactions = time(0);  
@@ -48,7 +48,7 @@ private:
     
 public: 
 
-    int difficulty = 8; // number of leading zeros required in hash 
+    int difficulty = 6; // number of leading zeros required in hash 
     int target = 60; 
     
     BlockChain() {
@@ -63,6 +63,13 @@ public:
     
     void AppendBlock(string data) {
         string previousHash = (tail == nullptr) ? "0" : tail->Hash; 
+
+        if (tail == nullptr){
+            string databasePrev = getLatestHash();
+            if (databasePrev != ""){
+                previousHash = databasePrev;
+            }
+        }
 
         Block* newBlock = new Block(previousHash, data, difficulty);
         if (head == nullptr) {
