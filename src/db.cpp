@@ -11,7 +11,7 @@ using namespace std;
 void insertBlockDB(const std::string& prevHash, const std::string& hash, int nonce, time_t transactions) {
     try {
         
-        connection C("dbname=database user=phillipboll3 password=Internship2025 hostaddr=127.0.0.1 port=5432");
+        connection C("dbname=aws_database user=phillipboll3 password='#NewPassword2024' host=localhost port=5432");
         
         if (C.is_open()) {
             work W(C);
@@ -34,7 +34,8 @@ void insertBlockDB(const std::string& prevHash, const std::string& hash, int non
 
 bool blocksPresent(){
         try {
-            connection C("dbname=database user=phillipboll3 password=Internship2025 hostaddr=127.0.0.1 port=5432");
+            connection C("dbname=aws_database user=phillipboll3 password='#NewPassword2024' host=localhost port=5432");
+
 
             if (C.is_open()){
                 nontransaction N(C);
@@ -62,7 +63,8 @@ bool blocksPresent(){
 bool eraseDB(){
 
     try {
-    connection C("dbname=database user=phillipboll3 password=Internship2025 hostaddr=127.0.0.1 port=5432");
+    connection C("dbname=aws_database user=phillipboll3 password='#NewPassword2024' host=localhost port=5432");
+
     if (C.is_open()){
 
         work W(C);
@@ -86,7 +88,8 @@ bool eraseDB(){
 
 string getLatestHash(){
     try {
-            connection C("dbname=database user=phillipboll3 password=Internship2025 hostaddr=127.0.0.1 port=5432");
+            connection C("dbname=aws_database user=phillipboll3 password='#NewPassword2024' host=localhost port=5432");
+
 
             if (C.is_open()){
                 nontransaction N(C);
@@ -120,7 +123,8 @@ string getLatestHash(){
 
 int lastBlock(){
     try {
-        connection C("dbname=database user=phillipboll3 password=Internship2025 hostaddr=127.0.0.1 port=5432");
+        connection C("dbname=aws_database user=phillipboll3 password='#NewPassword2024' host=localhost port=5432");
+
         if (C.is_open()){
             nontransaction N(C);
 
@@ -150,7 +154,8 @@ void insertVoteDB(const std::string& voter_first, const std::string& voter_last,
     if (blockHash != ""){
     
         try {
-            connection C("dbname=database user=phillipboll3 password=Internship2025 hostaddr=127.0.0.1 port=5432");
+            connection C("dbname=aws_database user=phillipboll3 password='#NewPassword2024' host=localhost port=5432");
+
 
             if (C.is_open()){
                 work W(C);

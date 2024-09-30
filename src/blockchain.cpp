@@ -175,7 +175,7 @@ int adjustDifficulty(Block* prevBlock, Block* currentBlock, int currentDifficult
 
 bool databaseToChain(BlockChain &blockchain){
     try {
-    connection C("dbname=database user=phillipboll3 password=Internship2025 hostaddr=127.0.0.1 port=5432");
+    connection C("dbname=aws_database user=phillipboll3 password='#NewPassword2024' host=localhost port=5432");
 
     nontransaction N(C);
 
