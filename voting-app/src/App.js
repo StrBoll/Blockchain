@@ -17,14 +17,14 @@ const TerminalController = (props = {}) => {
     <div className="container">
       <Terminal
         name="React Terminal UI"
-        colorMode={ColorMode.Dark}
+        colorMode={ColorMode.Light}
         prompt=">"
         onInput={handleInput}
         height="25em"
         startingInputValue=""
-        redBtnCallback={() => alert('Red button clicked!')}
-        yellowBtnCallback={() => alert('Yellow button clicked!')}
-        greenBtnCallback={() => alert('Green button clicked!')}
+        redBtnCallback={() => alert('Trying to leave? No :)')}
+        yellowBtnCallback={() => alert('Sorry, I won\'t minimize')}
+        greenBtnCallback={() => alert('Am I not big enough?')}
       >
         {terminalLineData}
       </Terminal>
