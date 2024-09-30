@@ -118,8 +118,38 @@ g++ -std=c++17 -o exec main.cpp db.cpp blockchain.cpp multithread.cpp \
 
 
 
+g++ -std=c++17 -o exec server.cpp db.cpp blockchain.cpp multithread.cpp \
+-I/opt/homebrew/opt/openssl@3/include \
+-I/opt/homebrew/opt/postgresql@14/include \
+-I/opt/homebrew/include \
+-I/Users/phillipboll3/Downloads/asio/asio/include \
+-I/Users/phillipboll3/Desktop/Blockchain/Crow/include \
+-L/opt/homebrew/opt/openssl@3/lib \
+-L/opt/homebrew/opt/postgresql@14/lib \
+-L/opt/homebrew/opt/libpqxx/lib \
+-lssl -lcrypto -lpqxx -pthread -Wno-deprecated-declarations
+
+
+
+The above is used for including Crow, which I am used to create an API for my backend that connects to my Terminal UI in javascript
+
 
 ./exec
+
+
+Transferring Executable API file from blockchain project to EC2 Instance on AWS
+------------------------------------------------
+scp -i /Users/phillipboll3/Desktop/SSH/blockchain-frontend.pem /Users/phillipboll3/Desktop/Blockchain/src/exec ubuntu@52.14.200.242:/home/ubuntu/
+
+
+Compiling the project on the EC2 Instance
+-------------------------------------------
+g++ -std=c++17 -o exec server.cpp db.cpp blockchain.cpp multithread.cpp \
+-I/usr/include/openssl \
+-I/usr/include/postgresql \
+-I/home/ubuntu/Crow/include \
+-L/usr/lib/x86_64-linux-gnu \
+-lpqxx -lssl -lcrypto -pthread
 
 
 

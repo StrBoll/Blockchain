@@ -9,6 +9,7 @@ using namespace std;
 
 int main() {
 
+    /*
     BlockChain blockchain;
 
     cout <<"\n";
@@ -40,6 +41,6 @@ int main() {
 
     
     cout << "Is blockchain valid? " << (blockchain.validateChain() ? "Yes" : "No") << endl;
-    
+    */    
     return 0;
 }

@@ -11,55 +11,76 @@ const Terminal = () => {
   const [isComplete, setIsComplete] = useState(false); // Track completion of all prompts
   const inputRef = useRef(null); // Create a reference for the input field
 
-  // Prompts for each step
   const prompts = [
     'Please provide your first name only:',
     'Now enter your last name:',
     'Please select from a list of candidates for our 2024 election:\n 1: Donald Trump\n 2: Kamala Harris\n 3: Jill Stein\n 4: Phillip Boll',
   ];
 
-  // Commands prompt after completion
   const helpPrompt = "Type 'help' for list of commands.";
 
-  // Validation function for name input (letters only)
-  const validateNameInput = (name) => {
-    const regex = /^[a-zA-Z]+$/; // Letters only
-    return regex.test(name);
-  };
+  const validateNameInput = (name) => /^[a-zA-Z]+$/.test(name);
+  const validateCandidateInput = (selection) => ['1', '2', '3', '4'].includes(selection);
 
-  // Validation function for candidate selection (1, 2, 3, or 4)
-  const validateCandidateInput = (selection) => {
-    return ['1', '2', '3', '4'].includes(selection);
+  const appendBlockToBlockchain = async (firstName, lastName, candidate) => {
+    try {
+      const response = await fetch('http://52.14.200.242:18080/appendBlock', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          firstName,
+          lastName,
+          candidate,
+        }),
+      });
+  
+      const result = await response.text();
+      setHistory((prevHistory) => [...prevHistory, `> Block added: ${result}`]);
+    } catch (error) {
+      setHistory((prevHistory) => [...prevHistory, `> Error: ${error.message}`]);
+    }
   };
+  
 
   const handleInputSubmit = (e) => {
     if (e.key === 'Enter') {
       if (currentStep === 0) {
         if (validateNameInput(input)) {
-          setFirstName(input); // Store first name
-          setHistory([...history, prompts[currentStep], `> ${input}`]); // Add prompt and user input to history
-          setCurrentStep(currentStep + 1); // Move to the next step
+          setFirstName(input);
+          setHistory([...history, prompts[currentStep], `> ${input}`]);
+          setCurrentStep(currentStep + 1);
         } else {
           setHistory([...history, `> ${input}`, 'Please insert one name with letters only']);
         }
       } else if (currentStep === 1) {
         if (validateNameInput(input)) {
-          setLastName(input); // Store last name
-          setHistory([...history, prompts[currentStep], `> ${input}`]); // Add prompt and user input to history
-          setCurrentStep(currentStep + 1); // Move to the next step
+          setLastName(input);
+          setHistory([...history, prompts[currentStep], `> ${input}`]);
+          setCurrentStep(currentStep + 1);
         } else {
           setHistory([...history, `> ${input}`, 'Please insert one name with letters only']);
         }
       } else if (currentStep === 2) {
         if (validateCandidateInput(input)) {
-          setCandidate(input); // Store candidate selection
+          const candidateMap = {
+            '1': 'Donald Trump',
+            '2': 'Kamala Harris',
+            '3': 'Jill Stein',
+            '4': 'Phillip Boll',
+          };
+          setCandidate(candidateMap[input]);
           setHistory((prevHistory) => [
             ...prevHistory,
-            prompts[currentStep], // Only append the prompt and input once
+            prompts[currentStep],
             `> ${input}`,
-            helpPrompt, // Add the help prompt after completion
+            helpPrompt,
           ]);
-          setIsComplete(true); // Mark completion
+          setIsComplete(true);
+
+          // Append block to blockchain via backend
+          appendBlockToBlockchain(firstName, lastName, candidateMap[input]);
         } else {
           setHistory([...history, `> ${input}`, 'Please select 1, 2, 3, or 4']);
         }
@@ -74,7 +95,6 @@ const Terminal = () => {
   };
 
   const handleClickTerminal = () => {
-    // Focus on the input field when clicking on the terminal container
     if (inputRef.current) {
       inputRef.current.focus();
     }
@@ -98,7 +118,6 @@ const Terminal = () => {
     setInput(''); // Clear input field
   };
 
-  // Helper function to display newlines as <br> in HTML
   const renderPromptWithLineBreaks = (text) => {
     return text.split('\n').map((line, index) => (
       <span key={index}>
@@ -136,15 +155,15 @@ const Terminal = () => {
 
         <div className="terminal-input">
           <input
-            ref={inputRef} // Attach the ref to the input field
+            ref={inputRef}
             type="text"
             value={input}
             onChange={handleInputChange}
             onKeyDown={(e) => {
               if (!isComplete) {
-                handleInputSubmit(e); // Handle step inputs
+                handleInputSubmit(e);
               } else if (e.key === 'Enter') {
-                handleCommand(); // Handle commands after steps are complete
+                handleCommand();
               }
             }}
             autoFocus
