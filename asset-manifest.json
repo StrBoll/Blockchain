@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/Blockchain_Voting/static/css/main.145765e5.css",
-    "main.js": "/Blockchain_Voting/static/js/main.b83e0df9.js",
+    "main.css": "/Blockchain_Voting/static/css/main.a65704bd.css",
+    "main.js": "/Blockchain_Voting/static/js/main.38ef2c63.js",
     "static/js/453.402d0198.chunk.js": "/Blockchain_Voting/static/js/453.402d0198.chunk.js",
     "index.html": "/Blockchain_Voting/index.html",
-    "main.145765e5.css.map": "/Blockchain_Voting/static/css/main.145765e5.css.map",
-    "main.b83e0df9.js.map": "/Blockchain_Voting/static/js/main.b83e0df9.js.map",
+    "main.a65704bd.css.map": "/Blockchain_Voting/static/css/main.a65704bd.css.map",
+    "main.38ef2c63.js.map": "/Blockchain_Voting/static/js/main.38ef2c63.js.map",
     "453.402d0198.chunk.js.map": "/Blockchain_Voting/static/js/453.402d0198.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.145765e5.css",
-    "static/js/main.b83e0df9.js"
+    "static/css/main.a65704bd.css",
+    "static/js/main.38ef2c63.js"
   ]
 }
