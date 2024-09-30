@@ -2,8 +2,8 @@
 #include <chrono>
 #include <iomanip>
 #include <sstream>
-#include "blockchain.h"   // Include the blockchain class header
-#include "db.h"           // Include the database-related functions
+#include "blockchain.h"   
+#include "db.h"           
 
 using namespace std;
 
@@ -11,60 +11,35 @@ int main() {
 
     BlockChain blockchain;
 
-    // Repopulate the blockchain from the database
+    cout <<"\n";
+    
     if (databaseToChain(blockchain)){
         blockchain.printChain();
     }
 
+    string firstName, lastName, vote;
 
-    
+    cout << "Enter your first name: ";
+    cin >> firstName;
+    cout << "Enter your last name: ";
+    cin >> lastName;
+    cout << "Enter your vote (Candidate name): ";
+    cin.ignore(); 
+    getline(cin, vote);
 
-    
-    // Mining block 1
-    cout << "Mining block 1... " << endl;
+    cout << "Mining block for your vote..." << endl;
     auto start = chrono::high_resolution_clock::now();
-    blockchain.AppendBlock("Vote: Candidate X");
+    blockchain.AppendBlock("Vote: " + vote);
     auto end = chrono::high_resolution_clock::now();
     chrono::duration<double> elapsed = end - start;
-    cout << "Block 1 took: " << elapsed.count() << " seconds to mine" << endl;
+    cout << "Block for your vote took: " << elapsed.count() << " seconds to mine" << endl;
 
-    // Add block 1 to database
+    
     insertBlockDB(blockchain.getTail()->prevHash, blockchain.getTail()->Hash, blockchain.getTail()->nonce, blockchain.getTail()->transactions);
-    insertVoteDB("phillip", "Boll", "Candidate X");
+    insertVoteDB(firstName, lastName, vote);
 
-    // Mining block 2
-    cout << "Mining block 2... " << endl;
-    start = chrono::high_resolution_clock::now();
-    blockchain.AppendBlock("Vote: Candidate Y");
-    end = chrono::high_resolution_clock::now();
-    elapsed = end - start;
-    cout << "Block 2 took: " << elapsed.count() << " seconds to mine" << endl;
-
-    // Adjust the difficulty
-    cout << "Previous Difficulty: " << blockchain.difficulty << endl;
-    blockchain.difficulty = adjustDifficulty(blockchain.getTail()->prev, blockchain.getTail(), blockchain.difficulty, 5);
-    cout << "Updated Difficulty: " << blockchain.difficulty << endl;
-
-    // Add block 2 to database
-    insertBlockDB(blockchain.getTail()->prevHash, blockchain.getTail()->Hash, blockchain.getTail()->nonce, blockchain.getTail()->transactions);
-    insertVoteDB("Karina", "Santos", "Candidate Y");
-
-    // Mining block 3
-    cout << "Mining block 3... " << endl;
-    start = chrono::high_resolution_clock::now();
-    blockchain.AppendBlock("Vote: Barack Obama");
-    end = chrono::high_resolution_clock::now();
-    elapsed = end - start;
-    cout << "Block 3 took: " << elapsed.count() << " seconds to mine" << endl;
-
-    // Add block 3 to database
-    insertBlockDB(blockchain.getTail()->prevHash, blockchain.getTail()->Hash, blockchain.getTail()->nonce, blockchain.getTail()->transactions);
-    insertVoteDB("Adrian", "Kolber", "Candidate Z");
-
-    // Validate the blockchain
+    
     cout << "Is blockchain valid? " << (blockchain.validateChain() ? "Yes" : "No") << endl;
     
-    
-
     return 0;
 }
