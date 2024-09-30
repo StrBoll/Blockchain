@@ -3,6 +3,7 @@
 
 #include <pqxx/pqxx>
 #include <string> 
+#include "blockchain.h"
 
 
 void insertBlockDB(const std::string &prevHash, const std::string &hash, int nonce, time_t transactions); // inserts new blocks to database
@@ -18,6 +19,5 @@ int lastBlock();
 std::string getLatestHash();
 
 int verifyVoters();
-
 
 #endif

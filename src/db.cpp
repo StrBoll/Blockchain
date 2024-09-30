@@ -1,6 +1,7 @@
 #include "db.h"
-#include <pqxx/pqxx> 
+#include <pqxx/pqxx>
 #include <iostream>
+#include "blockchain.h"
 #include <string>
 
 using namespace pqxx;
@@ -171,7 +172,3 @@ void insertVoteDB(const std::string& voter_first, const std::string& voter_last,
     }
 
 }
-
-
-
-
