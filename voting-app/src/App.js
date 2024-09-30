@@ -26,6 +26,7 @@ const Terminal = () => {
     try {
       const response = await fetch('http://52.14.200.242:18080/appendBlock', {
         method: 'POST',
+        mode: 'no-cors',
         headers: {
           'Content-Type': 'application/json',
         },
