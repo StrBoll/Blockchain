@@ -107,7 +107,7 @@ g++ -o exec main.cpp -I/opt/homebrew/opt/openssl@3/include -L/opt/homebrew/opt/o
 The most up-to-date executable for using the database:
 ------------------------------------------------------
 
-g++ -std=c++17 -o exec main.cpp db.cpp multithread.cpp \
+g++ -std=c++17 -o exec main.cpp db.cpp blockchain.cpp multithread.cpp \
 -I/opt/homebrew/opt/openssl@3/include \
 -I/opt/homebrew/opt/postgresql@14/include \
 -I/opt/homebrew/include \
