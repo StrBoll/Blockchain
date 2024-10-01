@@ -12,7 +12,7 @@ Block::Block(std::string prevhash, std::string Data, int difficulty) {
     this->prevHash = prevhash;
     std::string returnHash;
     
-    Mining mineIt(4, difficulty);
+    Mining mineIt(6, difficulty);
     this->nonce = mineIt.mineBlock(prevHash, Data, returnHash);
     this->data = Data;
     this->transactions = time(0);  
@@ -205,8 +205,9 @@ bool databaseToChain(BlockChain &blockchain){
 
     for (auto iter = query.begin(); iter != query.end(); ++iter){
 
-        string prevHash = (*iter)["previous_hash"].as<string>();
-        string currHash = (*iter)["current_hash"].as<string>();
+        string prevHash = (*iter)["previous_hash"].is_null() ? "0" : (*iter)["previous_hash"].as<string>();
+        string currHash = (*iter)["current_hash"].is_null() ? "" : (*iter)["current_hash"].as<string>();
+
         int nonce = (*iter)["nonce"].as<int>();
         //time_t transactions = (*iter)["transaction_time"].as<time_t>();
         string voterFirstName = (*iter2)["voterFirst"].as<string>();
@@ -223,11 +224,13 @@ bool databaseToChain(BlockChain &blockchain){
         //newBlock->transactions = transactions;
 
         if (blockchain.getTail() == nullptr) {
+            newBlock->prevHash = "0";
             blockchain.setHead(newBlock);
             blockchain.setTail(newBlock);
         } else {
             blockchain.getTail()->next = newBlock;
             newBlock->prev = blockchain.getTail();
+            newBlock->prevHash = blockchain.getTail()->Hash; 
             blockchain.setTail(newBlock);
         }
 

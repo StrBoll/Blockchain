@@ -2,14 +2,14 @@ import React, { useState, useRef } from 'react';
 import './terminal.css';
 
 const Terminal = () => {
-  const [input, setInput] = useState(''); // User input
-  const [history, setHistory] = useState([]); // Terminal history
-  const [currentStep, setCurrentStep] = useState(0); // Controls the flow of steps
-  const [firstName, setFirstName] = useState(''); // Store first name
-  const [lastName, setLastName] = useState(''); // Store last name
-  const [candidate, setCandidate] = useState(''); // Store candidate selection
-  const [isComplete, setIsComplete] = useState(false); // Track completion of all prompts
-  const inputRef = useRef(null); // Create a reference for the input field
+  const [input, setInput] = useState('');
+  const [history, setHistory] = useState([]);
+  const [currentStep, setCurrentStep] = useState(0);
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [candidate, setCandidate] = useState('');
+  const [isComplete, setIsComplete] = useState(false);
+  const inputRef = useRef(null);
 
   const prompts = [
     'Please provide your first name only:',
@@ -43,7 +43,6 @@ const Terminal = () => {
       setHistory((prevHistory) => [...prevHistory, `> Error: ${error.message}`]);
     }
   };
-  
 
   const handleInputSubmit = (e) => {
     if (e.key === 'Enter') {
@@ -79,15 +78,12 @@ const Terminal = () => {
             helpPrompt,
           ]);
           setIsComplete(true);
-
-          // Append block to blockchain via backend
           appendBlockToBlockchain(firstName, lastName, candidateMap[input]);
         } else {
           setHistory([...history, `> ${input}`, 'Please select 1, 2, 3, or 4']);
         }
       }
-
-      setInput(''); // Clear input field
+      setInput('');
     }
   };
 
@@ -115,8 +111,7 @@ const Terminal = () => {
         `Unknown command: '${input}'`,
       ]);
     }
-
-    setInput(''); // Clear input field
+    setInput('');
   };
 
   const renderPromptWithLineBreaks = (text) => {
