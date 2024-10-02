@@ -192,7 +192,7 @@ string tallyVotes(){
         if (C.is_open()){
             nontransaction N(C);
 
-            string command = "SELECT candidate_name FROM votes;";
+            string command = "SELECT candidate_vote FROM votes;";
 
             result R(N.exec(command));
 
