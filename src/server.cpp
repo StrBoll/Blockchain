@@ -78,7 +78,7 @@ int main() {
 
     app().registerHandler("/topCandidate", [](const HttpRequestPtr &req, std::function<void(const HttpResponsePtr &)> &&callback) {
     
-        string topPerson = tallyVotes();
+        string topPerson = "\n" + tallyVotes();
         
         auto resp = HttpResponse::newHttpResponse();
         resp->addHeader("Access-Control-Allow-Origin", "*");  

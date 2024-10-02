@@ -17,7 +17,7 @@ const Terminal = () => {
     'Please select from a list of candidates for our 2024 election:\n 1: Donald Trump\n 2: Kamala Harris\n 3: Jill Stein\n 4: Phillip Boll',
   ];
 
-  const helpPrompt = "Type 'help' for list of commands.";
+  const helpPrompt = "Type 'help' for list of commands. \n Mining your vote...";
 
   const validateNameInput = (name) => /^[a-zA-Z]+$/.test(name);
   const validateCandidateInput = (selection) => ['1', '2', '3', '4'].includes(selection);
