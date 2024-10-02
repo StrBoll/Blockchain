@@ -48,6 +48,7 @@
         "tuple": "cpp",
         "typeinfo": "cpp",
         "unordered_map": "cpp",
-        "algorithm": "cpp"
+        "algorithm": "cpp",
+        "fstream": "cpp"
     }
 }

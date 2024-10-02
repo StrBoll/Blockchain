@@ -177,3 +177,79 @@ void insertVoteDB(const std::string& voter_first, const std::string& voter_last,
     }
 
 }
+
+string tallyVotes(){
+
+    try {
+
+        connection C("dbname=aws_database user=phillipboll3 password='#NewPassword2024' host=localhost port=5432");
+
+
+        int Donald(0);
+        int Kamala(0);
+        int Jill(0);
+        int Phillip(0);
+        if (C.is_open()){
+            nontransaction N(C);
+
+            string command = "SELECT candidate_name FROM votes;";
+
+            result R(N.exec(command));
+
+            for (auto iter = R.begin(); iter != R.end(); ++iter){
+
+                if (iter[0].as<string>() == "Phillip Boll"){
+                    Phillip++;
+                } else if (iter[0].as<string>() == "Kamala Harris"){
+                    Kamala++;
+                } else if (iter[0].as<string>() == "Donald Trump"){
+                    Donald++;
+                } else {
+                    Jill++;
+                }
+
+
+
+            }
+
+            int highestVotes = max({Phillip, Kamala, Donald, Jill});
+            string candidate;
+
+            if (highestVotes == Phillip){
+                candidate = "Phillip Boll";
+            }
+            else if (highestVotes == Kamala){
+                candidate = "Kamala Harris";
+            }
+            else if (highestVotes == Donald){
+                candidate = "Donald Trump";
+            }
+            else {
+
+                candidate = "Jill Stein";
+            }
+            
+
+            C.disconnect();
+
+
+            return "Top Candidate: " + candidate + " with " + to_string(highestVotes) + " votes";
+
+
+
+
+
+
+           
+            
+        }
+
+        
+
+    }
+
+    catch (const exception &e){
+        cerr << e.what() << endl;
+        return "Could not connect to AWS database";
+    }
+}
