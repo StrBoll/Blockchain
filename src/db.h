@@ -20,4 +20,6 @@ std::string getLatestHash();
 
 int verifyVoters();
 
+std::string tallyVotes();
+
 #endif

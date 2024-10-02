@@ -43,6 +43,22 @@ const Terminal = () => {
     }
 };
 
+const showTopCandidate = async () => {
+  try {
+    const response = await fetch('http://52.14.200.242:18080/topCandidate', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    });
+
+    const result = await response.text();
+    setHistory((prevHistory) => [...prevHistory, `> Accessing AWS database... ${result}`]);
+  } catch (error) {
+    setHistory((prevHistory) => [...prevHistory, `> Error: ${error.message}`]);
+  }
+};
+
 const printVotesAwsDatabase = async () => {
     try {
       const response = await fetch('http://52.14.200.242:18080/printVotes', {
@@ -118,11 +134,13 @@ const printVotesAwsDatabase = async () => {
       setHistory((prevHistory) => [
         ...prevHistory,
         `> ${input}`,
-        "Available commands: 'Votes - print AWS database of votes'",
+        "Available commands: \n 'votes - print AWS database of votes' \n 'winning - show who\'s leading the polls",
       ]);
-    } else if (input.trim() === 'Votes') {
+    } else if (input.trim() === 'votes') {
       printVotesAwsDatabase();
-    } else {
+    } else if(input.trim() === 'winning'){
+      showTopCandidate();
+    }else {
       setHistory((prevHistory) => [
         ...prevHistory,
         `> ${input}`,

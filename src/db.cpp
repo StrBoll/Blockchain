@@ -230,7 +230,7 @@ string tallyVotes(){
             }
             
 
-            C.disconnect();
+            
 
 
             return "Top Candidate: " + candidate + " with " + to_string(highestVotes) + " votes";
