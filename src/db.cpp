@@ -195,9 +195,9 @@ string tallyVotes(){
             string command = "SELECT candidate_vote FROM votes;";
 
             result R(N.exec(command));
-
+            
             for (auto iter = R.begin(); iter != R.end(); ++iter){
-
+                
                 if (iter[0].as<string>() == "Phillip Boll"){
                     Phillip++;
                 } else if (iter[0].as<string>() == "Kamala Harris"){
