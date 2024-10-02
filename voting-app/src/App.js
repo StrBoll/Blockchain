@@ -24,24 +24,25 @@ const Terminal = () => {
 
   const appendBlockToBlockchain = async (firstName, lastName, candidate) => {
     try {
-      const response = await fetch('http://52.14.200.242:18080/appendBlock', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          firstName,
-          lastName,
-          candidate,
-        }),
-      });
-  
-      const result = await response.json();
-      setHistory((prevHistory) => [...prevHistory, `> Block added: ${result}`]);
+        const response = await fetch('http://52.14.200.242:18080/appendBlock', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                firstName,
+                lastName,
+                candidate,
+            }),
+        });
+
+        const result = await response.text();  // changed it from JSON to plain text expected response
+        setHistory((prevHistory) => [...prevHistory, `> Block added: ${result}`]);
     } catch (error) {
-      setHistory((prevHistory) => [...prevHistory, `> Error: ${error.message}`]);
+        setHistory((prevHistory) => [...prevHistory, `> Error: ${error.message}`]);
     }
 };
+
 
 const showTopCandidate = async () => {
   try {

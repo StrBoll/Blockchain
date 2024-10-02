@@ -17,7 +17,7 @@ Mining::Mining(int numThreads, int difficulty){
 
 }
 
-void Mining::threading(int threadNum, atomic<int>& sharedNonce, const string& prevHash, const string& data) {
+void Mining::threading(int threadNum, atomic<int>& sharedNonce, const string& prevHash, const string& data, string& resultMessage) {
     string tempHash;
     
     while (!done.load()) {  
@@ -31,6 +31,8 @@ void Mining::threading(int threadNum, atomic<int>& sharedNonce, const string& pr
                 done = true;
                 nonceFound = nonce;
                 hashFound = tempHash;
+                resultMessage = "Thread #" + to_string(threadNum) + " found valid nonce at: " + to_string(nonce) + " with hash: " + tempHash;
+
                 cout << "Thread #" << threadNum << " found valid nonce at: " << nonce 
                      << " with hash: " << tempHash << endl;
             }
@@ -38,7 +40,7 @@ void Mining::threading(int threadNum, atomic<int>& sharedNonce, const string& pr
     }
 }
 
-int Mining::mineBlock(string prevHash, string data, string& returnHash){
+int Mining::mineBlock(string prevHash, string data, string& returnHash, string& resultMessage){
     vector<thread> threads;
     atomic<int> sharedNonce(0);
     int nonce = 0;
@@ -47,7 +49,7 @@ int Mining::mineBlock(string prevHash, string data, string& returnHash){
     
 
     for (int i = 0; i < numThreads; ++i){
-        threads.emplace_back(&Mining::threading, this, i, ref(sharedNonce), cref(prevHash), cref(data));
+        threads.emplace_back(&Mining::threading, this, i, ref(sharedNonce), cref(prevHash), cref(data), ref(resultMessage));
     }
 
     for (auto &thread : threads){

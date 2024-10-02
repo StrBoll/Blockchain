@@ -13,30 +13,34 @@ using namespace std;
 int main() {
    
     app().registerHandler("/appendBlock", [](const HttpRequestPtr &req, function<void(const HttpResponsePtr &)> &&callback) {
-        auto json = req->getJsonObject();
-        if (!json) {
-            auto resp = HttpResponse::newHttpResponse();
-            resp->setStatusCode(k400BadRequest);
-            callback(resp);
-            return;
-        }
-
-        // get JSON data into string format
-        string firstName = (*json)["firstName"].asString();
-        string lastName = (*json)["lastName"].asString();
-        string candidate = (*json)["candidate"].asString();
-        string blockData = firstName + " " + lastName + " voted for " + candidate;
-
-        // put block in chain
-        blockchain.AppendBlock(blockData);
-        insertBlockDB(blockchain.getTail()->prevHash, blockchain.getTail()->Hash, blockchain.getTail()->nonce, blockchain.getTail()->transactions);
-        insertVoteDB(firstName, lastName, candidate);
-
-        // give a response
-        auto resp = HttpResponse::newHttpJsonResponse(*json);
-        resp->addHeader("Access-Control-Allow-Origin", "*");
+    auto json = req->getJsonObject();
+    if (!json) {
+        auto resp = HttpResponse::newHttpResponse();
+        resp->setStatusCode(k400BadRequest);
         callback(resp);
-    });
+        return;
+    }
+
+   
+    string firstName = (*json)["firstName"].asString();
+    string lastName = (*json)["lastName"].asString();
+    string candidate = (*json)["candidate"].asString();
+    string blockData = firstName + " " + lastName + " voted for " + candidate;
+
+    
+    string miningResult;
+    blockchain.AppendBlock(blockData, miningResult);  
+    
+    
+    insertBlockDB(blockchain.getTail()->prevHash, blockchain.getTail()->Hash, blockchain.getTail()->nonce, blockchain.getTail()->transactions);
+    insertVoteDB(firstName, lastName, candidate);
+
+    
+    auto resp = HttpResponse::newHttpResponse();
+    resp->addHeader("Access-Control-Allow-Origin", "*");
+    resp->setBody(miningResult);  
+    callback(resp);
+});
 
     // functions from my terminal UI
     app().registerHandler("/printVotes", [](const HttpRequestPtr &req, std::function<void(const HttpResponsePtr &)> &&callback) {

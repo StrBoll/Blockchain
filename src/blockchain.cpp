@@ -8,12 +8,12 @@
 
 using namespace pqxx;
 
-Block::Block(std::string prevhash, std::string Data, int difficulty) {
+Block::Block(std::string prevhash, std::string Data, int difficulty, std::string& miningResult) {
     this->prevHash = prevhash;
     std::string returnHash;
     
     Mining mineIt(8, difficulty);
-    this->nonce = mineIt.mineBlock(prevHash, Data, returnHash);
+    this->nonce = mineIt.mineBlock(prevHash, Data, returnHash, miningResult);
     this->data = Data;
     this->transactions = time(0);  
     next = nullptr;
@@ -54,10 +54,10 @@ void BlockChain::setHead(Block* head){
     this->head = head;
 }
 
-void BlockChain::AppendBlock(std::string data) {
+void BlockChain::AppendBlock(std::string data, std::string& miningResult) {
     std::string previousHash = (tail == nullptr) ? "0" : tail->Hash; 
 
-    Block* newBlock = new Block(previousHash, data, difficulty);
+    Block* newBlock = new Block(previousHash, data, difficulty, miningResult);
     if (head == nullptr) {
         head = newBlock;
         tail = newBlock;
