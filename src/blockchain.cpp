@@ -12,7 +12,7 @@ Block::Block(std::string prevhash, std::string Data, int difficulty) {
     this->prevHash = prevhash;
     std::string returnHash;
     
-    Mining mineIt(6, difficulty);
+    Mining mineIt(8, difficulty);
     this->nonce = mineIt.mineBlock(prevHash, Data, returnHash);
     this->data = Data;
     this->transactions = time(0);  

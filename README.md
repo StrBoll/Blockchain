@@ -119,19 +119,15 @@ g++ -std=c++17 -o exec main.cpp db.cpp blockchain.cpp multithread.cpp \
 
 
 g++ -std=c++17 -o exec server.cpp db.cpp blockchain.cpp multithread.cpp \
--I/opt/homebrew/opt/openssl@3/include \
--I/opt/homebrew/opt/postgresql@14/include \
--I/opt/homebrew/include \
--I/Users/phillipboll3/Downloads/asio/asio/include \
--I/Users/phillipboll3/Desktop/Blockchain/Crow/include \
--L/opt/homebrew/opt/openssl@3/lib \
--L/opt/homebrew/opt/postgresql@14/lib \
--L/opt/homebrew/opt/libpqxx/lib \
--lssl -lcrypto -lpqxx -pthread -Wno-deprecated-declarations
+-I/usr/include/openssl \
+-I/usr/include/postgresql \
+-I/usr/include/jsoncpp \
+-L/usr/lib/x86_64-linux-gnu \
+-lpqxx -lssl -lcrypto -pthread -ldrogon -ljsoncpp -ltrantor
 
 
 
-The above is used for including Crow, which I am used to create an API for my backend that connects to my Terminal UI in javascript
+The above is used for including Drogon, which I am used to create an API for my backend that connects to my Terminal UI in javascript
 
 
 ./exec

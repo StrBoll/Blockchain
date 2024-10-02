@@ -1,110 +1,78 @@
-#include "crow.h"
+#include <drogon/drogon.h>
 #include "blockchain.h"
 #include "db.h"
 #include <pqxx/pqxx>
 
 BlockChain blockchain;
 
+using namespace drogon;
+using namespace pqxx;
+using namespace std;
+
 int main() {
-    crow::SimpleApp app;
-
-    CROW_ROUTE(app, "/")([]() {
-        crow::response res;
-        res.set_header("Access-Control-Allow-Origin", "*");
-        res.set_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
-        res.set_header("Access-Control-Allow-Headers", "Content-Type");
-        res.write("Hello, Crow!");
-        return res;
-    });
-
-    CROW_ROUTE(app, "/appendBlock").methods(crow::HTTPMethod::POST, crow::HTTPMethod::OPTIONS)
-    ([](const crow::request& req) {
-        if (req.method == crow::HTTPMethod::OPTIONS) {
-            crow::response res;
-            res.set_header("Access-Control-Allow-Origin", "*");
-            res.set_header("Access-Control-Allow-Methods", "POST, OPTIONS");
-            res.set_header("Access-Control-Allow-Headers", "Content-Type");
-            res.code = 204;
-            return res;
+    // Define the route for appending a block
+    drogon::app().registerHandler("/appendBlock", [](const HttpRequestPtr &req,
+                                           std::function<void(const HttpResponsePtr &)> &&callback) {
+        auto json = req->getJsonObject();
+        if (!json) {
+            auto resp = HttpResponse::newHttpResponse();
+            resp->setStatusCode(k400BadRequest);
+            callback(resp);
+            return;
         }
 
-        auto body = crow::json::load(req.body);
-        if (!body) {
-            return crow::response(400, "Invalid JSON data");
-        }
-
-        std::string firstName = body["firstName"].s();
-        std::string lastName = body["lastName"].s();
-        std::string candidate = body["candidate"].s();
+        // Extract JSON data
+        std::string firstName = (*json)["firstName"].asString();
+        std::string lastName = (*json)["lastName"].asString();
+        std::string candidate = (*json)["candidate"].asString();
         std::string blockData = firstName + " " + lastName + " voted for " + candidate;
 
+        // Append block to blockchain
         blockchain.AppendBlock(blockData);
-
         insertBlockDB(blockchain.getTail()->prevHash, blockchain.getTail()->Hash, blockchain.getTail()->nonce, blockchain.getTail()->transactions);
         insertVoteDB(firstName, lastName, candidate);
 
-        crow::response res;
-        res.set_header("Access-Control-Allow-Origin", "*");
-        res.set_header("Access-Control-Allow-Methods", "POST, OPTIONS");
-        res.set_header("Access-Control-Allow-Headers", "Content-Type");
-        res.write("Block added to blockchain and vote saved.");
-        res.code = 200;
-        return res;
+        // Respond to the request
+        auto resp = HttpResponse::newHttpJsonResponse(*json);
+        resp->addHeader("Access-Control-Allow-Origin", "*");
+        callback(resp);
     });
 
-    CROW_ROUTE(app, "/printVotes").methods(crow::HTTPMethod::POST, crow::HTTPMethod::OPTIONS)
-    ([](const crow::request& req) {
-        if (req.method == crow::HTTPMethod::OPTIONS) {
-            crow::response res;
-            res.set_header("Access-Control-Allow-Origin", "*");
-            res.set_header("Access-Control-Allow-Methods", "POST, OPTIONS");
-            res.set_header("Access-Control-Allow-Headers", "Content-Type");
-            res.code = 204;
-            return res;
-        }
-
-        auto body = crow::json::load(req.body);
-        if (!body) {
-            return crow::response(400, "Invalid JSON data");
-        }
-
-        string toTerminal;
-
+    // Define the route to print votes from the database
+    drogon::app().registerHandler("/printVotes", [](const HttpRequestPtr &req,
+                                          std::function<void(const HttpResponsePtr &)> &&callback) {
+        std::string toTerminal;
         try {
-
-        connection C("dbname=aws_database user=phillipboll3 password='#NewPassword2024' host=localhost port=5432");
-
-            if (C.is_open()){
+            connection C("dbname=aws_database user=phillipboll3 password='#NewPassword2024' host=localhost port=5432");
+            if (C.is_open()) {
                 nontransaction N(C);
+                std::string command = "SELECT * FROM votes;";
+                result R(N.exec(command));
 
-                string command = "SELECT * FROM votes;";
-
-                result R(N.execute(command));
-
-                const auto iter = R.begin();
-
-                for (iter; iter != R.end(); ++iter){
-                    toTerminal = *iter["voterFirst"].as<string>() + " " + *iter["VoterLast"].as<string>() + " Vote: " << *iter["candidate_vote"].as<string>() + "\n";
-
+                for (auto iter = R.begin(); iter != R.end(); ++iter) {
+                    toTerminal += iter["voterFirst"].as<std::string>() + " " + iter["voterLast"].as<std::string>() + " Vote: " + iter["candidate_vote"].as<std::string>() + "\n";
                 }
-
             } else {
-                return crow::response(500, "Failed to connect to AWS Database");
+                auto resp = HttpResponse::newHttpResponse();
+                resp->setStatusCode(k500InternalServerError);
+                resp->setBody("Failed to connect to AWS Database");
+                callback(resp);
+                return;
             }
-
+        } catch (const std::exception &e) {
+            auto resp = HttpResponse::newHttpResponse();
+            resp->setStatusCode(k500InternalServerError);
+            resp->setBody("Error retrieving votes");
+            callback(resp);
+            return;
         }
-        catch (const exception &e){
-            cerr << e.what() << endl;
-        }
 
-        crow::response res;
-        res.set_header("Access-Control-Allow-Origin", "*");
-        res.set_header("Access-Control-Allow-Methods", "POST, OPTIONS");
-        res.set_header("Access-Control-Allow-Headers", "Content-Type");
-        res.write("Block added to blockchain and vote saved.");
-        res.code = 200;
-        return res;
+        auto resp = HttpResponse::newHttpResponse();
+        resp->addHeader("Access-Control-Allow-Origin", "*");
+        resp->setBody(toTerminal);
+        callback(resp);
     });
 
-    app.port(18080).multithreaded().run();
+    // Start the server
+    drogon::app().addListener("0.0.0.0", 18080).run();
 }

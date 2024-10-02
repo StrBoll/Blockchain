@@ -26,7 +26,6 @@ const Terminal = () => {
     try {
       const response = await fetch('http://52.14.200.242:18080/appendBlock', {
         method: 'POST',
-        mode: 'no-cors',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -37,13 +36,30 @@ const Terminal = () => {
         }),
       });
   
-      const result = await response.text();
+      const result = await response.json();
       setHistory((prevHistory) => [...prevHistory, `> Block added: ${result}`]);
     } catch (error) {
       setHistory((prevHistory) => [...prevHistory, `> Error: ${error.message}`]);
     }
-  };
+};
 
+const printVotesAwsDatabase = async () => {
+    try {
+      const response = await fetch('http://52.14.200.242:18080/printVotes', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+  
+      const result = await response.text();
+      setHistory((prevHistory) => [...prevHistory, '> Votes in Blockchain:', result]);
+    } catch (error) {
+      setHistory((prevHistory) => [...prevHistory, `> Error: ${error.message}`]);
+    }
+};
+
+  
   const handleInputSubmit = (e) => {
     if (e.key === 'Enter') {
       if (currentStep === 0) {
@@ -102,8 +118,10 @@ const Terminal = () => {
       setHistory((prevHistory) => [
         ...prevHistory,
         `> ${input}`,
-        "Available commands: 'help' - Shows the list of commands",
+        "Available commands: 'Votes - print AWS database of votes'",
       ]);
+    } else if (input.trim() === 'Votes') {
+      printVotesAwsDatabase();
     } else {
       setHistory((prevHistory) => [
         ...prevHistory,
@@ -113,7 +131,7 @@ const Terminal = () => {
     }
     setInput('');
   };
-
+  
   const renderPromptWithLineBreaks = (text) => {
     return text.split('\n').map((line, index) => (
       <span key={index}>
