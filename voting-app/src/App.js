@@ -9,9 +9,15 @@ const Terminal = () => {
   const [lastName, setLastName] = useState('');
   const [candidate, setCandidate] = useState('');
   const [isComplete, setIsComplete] = useState(false);
+  const [showDisclaimer, setShowDisclaimer] = useState(true);
   const inputRef = useRef(null);
 
+
+
+  const disclaimerMessage = "Due to the nature of how Amazon EC2 servers allow database access, if the server hasn't had interaction for a prolonged period of time you may receive a fetch failure your first time voting. If this happens, simply refresh the page and vote again.";
+
   const prompts = [
+    
     'Please provide your first name only:',
     'Now enter your last name:',
     'Please select from a list of candidates for our 2024 election:\n 1: Donald Trump\n 2: Kamala Harris\n 3: Jill Stein\n 4: Phillip Boll',
@@ -196,30 +202,39 @@ const showBlockchain = async () => {
           ))}
         </div>
 
-        <div className="terminal-prompt">
-          {!isComplete && (
-            <span className="prompt">
-              {renderPromptWithLineBreaks(prompts[currentStep])}
-            </span>
-          )}
-        </div>
+        {showDisclaimer ? (
+          <div className="terminal-prompt">
+            <span>{disclaimerMessage}</span>
+            <button onClick={() => setShowDisclaimer(false)}>Proceed</button>
+          </div>
+        ) : (
+          <>
+            <div className="terminal-prompt">
+              {!isComplete && (
+                <span className="prompt">
+                  {renderPromptWithLineBreaks(prompts[currentStep])}
+                </span>
+              )}
+            </div>
 
-        <div className="terminal-input">
-          <input
-            ref={inputRef}
-            type="text"
-            value={input}
-            onChange={handleInputChange}
-            onKeyDown={(e) => {
-              if (!isComplete) {
-                handleInputSubmit(e);
-              } else if (e.key === 'Enter') {
-                handleCommand();
-              }
-            }}
-            autoFocus
-          />
-        </div>
+            <div className="terminal-input">
+              <input
+                ref={inputRef}
+                type="text"
+                value={input}
+                onChange={handleInputChange}
+                onKeyDown={(e) => {
+                  if (!isComplete) {
+                    handleInputSubmit(e);
+                  } else if (e.key === 'Enter') {
+                    handleCommand();
+                  }
+                }}
+                autoFocus
+              />
+            </div>
+          </>
+        )}
       </div>
     </div>
   );

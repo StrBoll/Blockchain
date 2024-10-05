@@ -21,10 +21,11 @@ int main() {
         return;
     }
     
-    /*if (blockchain.getHead()->next != nullptr){
+   /* if (blockchain.getHead()->next != nullptr){
         blockchain.clearChain();
     }
     */
+
     databaseToChain(blockchain);
 
    
@@ -141,7 +142,8 @@ int main() {
         blockchainData += "Block #" + std::to_string(blockNumber) + ":\n";
         blockchainData += "Previous Hash: " + current->prevHash + "\n";
         blockchainData += "Current Hash: " + current->Hash + "\n";
-        blockchainData += "Nonce: " + std::to_string(current->nonce) + "\n\n";
+        blockchainData += "Nonce: " + std::to_string(current->nonce) + "\n";
+        blockchainData += "DOT: " + std::to_string(current->transactions) + "\n\n"; 
         current = current->next;
         blockNumber++;
     }
