@@ -76,6 +76,22 @@ const printVotesAwsDatabase = async () => {
     }
 };
 
+
+const showBlockchain = async () => {
+  try {
+    const response = await fetch('http://52.14.200.242:18080/showBlockchain', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    });
+
+    const result = await response.text();
+    setHistory((prevHistory) => [...prevHistory, `> Accessing AWS database... \n Printing Blockchain... \n ${result}`]);
+  } catch (error) {
+    setHistory((prevHistory) => [...prevHistory, `> Error: ${error.message}`]);
+  }
+};
   
   const handleInputSubmit = (e) => {
     if (e.key === 'Enter') {
@@ -139,6 +155,8 @@ const printVotesAwsDatabase = async () => {
       ]);
     } else if (input.trim() === 'votes') {
       printVotesAwsDatabase();
+    } else if (input.trim() === 'blockchain') {
+      showBlockchain();
     } else if(input.trim() === 'winning'){
       showTopCandidate();
     }else {

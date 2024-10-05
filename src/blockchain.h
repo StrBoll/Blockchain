@@ -33,6 +33,7 @@ public:
     Block* getTail(); // Get the last block in the chain
     void AppendBlock(std::string data, std::string& miningResult); // Add a block to the blockchain
     void printChain(); // Print all blocks in the blockchain
+    bool clearChain(); // clear blockchain
     Block* RetrieveBlock(std::string inputHash); // Retrieve a block by its hash
     bool validateChain(); // Validate the blockchain
     bool deleteBlock(std::string targetHash); // Delete a block by its hash

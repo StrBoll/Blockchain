@@ -74,6 +74,26 @@ void BlockChain::AppendBlock(std::string data, std::string& miningResult) {
     std::cout << "Successfully inserted block with hash: " << newBlock->Hash << std::endl;
 }
 
+bool BlockChain::clearChain(){
+
+    Block* current = head;
+    while (current != nullptr){
+        Block* temp = current;
+        current = current->next;
+        delete temp;
+    }
+
+    head = nullptr;
+    tail = nullptr;
+
+    if (current== nullptr){
+        return true;
+    }
+
+    return false;
+
+
+}
 
 void BlockChain::printChain() {
     Block* current = head;

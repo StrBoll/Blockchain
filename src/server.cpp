@@ -20,6 +20,12 @@ int main() {
         callback(resp);
         return;
     }
+    
+    /*if (blockchain.getHead()->next != nullptr){
+        blockchain.clearChain();
+    }
+    */
+    databaseToChain(blockchain);
 
    
     string firstName = (*json)["firstName"].asString();
@@ -27,13 +33,52 @@ int main() {
     string candidate = (*json)["candidate"].asString();
     string blockData = firstName + " " + lastName + " voted for " + candidate;
 
+
+    string previousHash = "not found";
     
+
+    try {
+
+        connection C("dbname=aws_database user=phillipboll3 password='#NewPassword2024' host=localhost port=5432");
+        
+        if (C.is_open()){
+
+            nontransaction N(C);
+            string command = "SELECT current_hash FROM blocks ORDER BY block_number DESC LIMIT 1;";
+
+
+            result R(N.exec(command));
+
+            if (!R.empty()){
+                previousHash = R[0]["current_hash"].as<string>();
+            }
+
+
+        }
+        else{
+            cout << "Could not access AWS database" << endl;
+        }
+
+
+
+    } catch (const exception &e){
+        cerr << e.what() << endl;
+        auto resp = HttpResponse::newHttpResponse();
+        resp->setStatusCode(k500InternalServerError);
+        resp->setBody("Database error: " + string(e.what()));
+        callback(resp);
+        return;
+    }
+
+
     string miningResult;
     blockchain.AppendBlock(blockData, miningResult);  
+
     
-    
-    insertBlockDB(blockchain.getTail()->prevHash, blockchain.getTail()->Hash, blockchain.getTail()->nonce, blockchain.getTail()->transactions);
+    insertBlockDB(previousHash, blockchain.getTail()->Hash, blockchain.getTail()->nonce, blockchain.getTail()->transactions);
     insertVoteDB(firstName, lastName, candidate);
+
+
 
     
     auto resp = HttpResponse::newHttpResponse();
@@ -85,6 +130,28 @@ int main() {
         resp->setBody(topPerson);
         callback(resp);
     });
+
+
+    app().registerHandler("/showBlockchain", [](const HttpRequestPtr &req, std::function<void(const HttpResponsePtr &)> &&callback) {
+    std::string blockchainData;
+    Block* current = blockchain.getHead();
+    int blockNumber = 0;
+
+    while (current != nullptr) {
+        blockchainData += "Block #" + std::to_string(blockNumber) + ":\n";
+        blockchainData += "Previous Hash: " + current->prevHash + "\n";
+        blockchainData += "Current Hash: " + current->Hash + "\n";
+        blockchainData += "Nonce: " + std::to_string(current->nonce) + "\n\n";
+        current = current->next;
+        blockNumber++;
+    }
+
+    auto resp = HttpResponse::newHttpResponse();
+    resp->addHeader("Access-Control-Allow-Origin", "*");
+    resp->setBody(blockchainData);
+    callback(resp);
+});
+
 
 
 
