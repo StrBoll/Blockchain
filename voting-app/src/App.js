@@ -14,7 +14,7 @@ const Terminal = () => {
 
 
 
-  const disclaimerMessage = "Due to the nature of how Amazon EC2 servers allow database access, if the server hasn't had interaction for a prolonged period of time you may receive a fetch failure your first time voting. If this happens, simply refresh the page and vote again.";
+  const disclaimerMessage = "Due to the nature of how *Free Tier* Amazon EC2 servers allow database access, if the server hasn't had interaction for a prolonged period of time you may receive a fetch failure your first time voting. If this happens, simply refresh the page and vote again.";
 
   const prompts = [
     
@@ -205,7 +205,7 @@ const showBlockchain = async () => {
         {showDisclaimer ? (
           <div className="terminal-prompt">
             <span>{disclaimerMessage}</span>
-            <button onClick={() => setShowDisclaimer(false)}>Proceed</button>
+            <button onClick={() => setShowDisclaimer(false)}> Proceed </button>
           </div>
         ) : (
           <>
