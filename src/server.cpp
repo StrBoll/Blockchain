@@ -157,7 +157,8 @@ int main() {
 
     app().registerHandler("/showThreads", [](const HttpRequestPtr &req, std::function<void(const HttpResponsePtr &)> &&callback) {
     
-    int threads = blockchain.difficulty;
+    string threads = to_string(blockchain.difficulty);
+    threads += " threads being used to mine blocks";
     
     auto resp = HttpResponse::newHttpResponse();
     resp->addHeader("Access-Control-Allow-Origin", "*");
