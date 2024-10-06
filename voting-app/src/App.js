@@ -98,6 +98,24 @@ const showBlockchain = async () => {
     setHistory((prevHistory) => [...prevHistory, `> Error: ${error.message}`]);
   }
 };
+
+
+const showThreadCount = async () => {
+  try {
+    const response = await fetch('http://52.14.200.242:18080/showThreads', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    });
+
+    const result = await response.text();
+    setHistory((prevHistory) => [...prevHistory, `> \n Accessing multithreading data.... \n There are currently: \n ${result}`]);
+  } catch (error) {
+    setHistory((prevHistory) => [...prevHistory, `> Error: ${error.message}`]);
+  }
+};
+  
   
   const handleInputSubmit = (e) => {
     if (e.key === 'Enter') {
@@ -165,7 +183,9 @@ const showBlockchain = async () => {
       showBlockchain();
     } else if(input.trim() === 'winning'){
       showTopCandidate();
-    }else {
+    }else if (input.trim() === 'threads'){ 
+      showThreadCount();
+    } else {
       setHistory((prevHistory) => [
         ...prevHistory,
         `> ${input}`,
