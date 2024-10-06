@@ -157,7 +157,7 @@ const showBlockchain = async () => {
       setHistory((prevHistory) => [
         ...prevHistory,
         `> ${input}`,
-        "Available commands: \n 'votes - print AWS database of votes' \n 'winning - show who\'s leading the polls",
+        "Available commands: \n 'votes\' - display the AWS database of votes' \n 'winning\' - display who\'s leading the polls \n \'blockchain\' - display the blockchain \n ",
       ]);
     } else if (input.trim() === 'votes') {
       printVotesAwsDatabase();

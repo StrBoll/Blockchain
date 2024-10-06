@@ -155,6 +155,18 @@ int main() {
 });
 
 
+    app().registerHandler("/showThreads", [](const HttpRequestPtr &req, std::function<void(const HttpResponsePtr &)> &&callback) {
+    
+    int threads = blockchain.difficulty;
+    
+    auto resp = HttpResponse::newHttpResponse();
+    resp->addHeader("Access-Control-Allow-Origin", "*");
+    resp->setBody(threads);
+    callback(resp);
+});
+
+
+
 
 
     
