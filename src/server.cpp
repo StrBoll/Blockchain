@@ -73,10 +73,11 @@ int main() {
 
 
     string miningResult;
-    blockchain.AppendBlock(blockData, miningResult);  
+    int totalHashTime;
+    blockchain.AppendBlock(blockData, miningResult, totalHashTime);  
 
     
-    insertBlockDB(previousHash, blockchain.getTail()->Hash, blockchain.getTail()->nonce, blockchain.getTail()->transactions);
+    insertBlockDB(previousHash, blockchain.getTail()->Hash, blockchain.getTail()->nonce, blockchain.getTail()->transactions, totalHashTime);
     insertVoteDB(firstName, lastName, candidate);
 
 

@@ -269,7 +269,7 @@ int averageHashTime(){
 
             string command = "SELECT hash_time FROM blocks;";
 
-            Result R(N.exec(command));
+            result R(N.exec(command));
 
             for (auto iter = R.begin(); iter != R.end(); ++iter){
 

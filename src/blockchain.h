@@ -15,7 +15,7 @@ struct Block {
     int nonce;
     time_t transactions;
 
-    Block(std::string prevhash, std::string Data, int difficulty, std::string& miningResult);
+    Block(std::string prevhash, std::string Data, int difficulty, std::string& miningResult, int& totalHashTime);
     Block(std::string prevhash, std::string Data, bool SHA);
 };
 
@@ -31,7 +31,7 @@ public:
     BlockChain(); // Constructor
     Block* getHead();
     Block* getTail(); // Get the last block in the chain
-    void AppendBlock(std::string data, std::string& miningResult); // Add a block to the blockchain
+    void AppendBlock(std::string data, std::string& miningResult, int& totalHashTime); // Add a block to the blockchain
     void printChain(); // Print all blocks in the blockchain
     bool clearChain(); // clear blockchain
     Block* RetrieveBlock(std::string inputHash); // Retrieve a block by its hash

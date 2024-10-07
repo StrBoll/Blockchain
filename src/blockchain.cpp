@@ -54,10 +54,10 @@ void BlockChain::setHead(Block* head){
     this->head = head;
 }
 
-void BlockChain::AppendBlock(std::string data, std::string& miningResult) {
+void BlockChain::AppendBlock(std::string data, std::string& miningResult, int& totalHashTime) {
     std::string previousHash = (tail == nullptr) ? "0" : tail->Hash; 
 
-    Block* newBlock = new Block(previousHash, data, difficulty, miningResult);
+    Block* newBlock = new Block(previousHash, data, difficulty, miningResult, totalHashTime);
     if (head == nullptr) {
         head = newBlock;
         tail = newBlock;
