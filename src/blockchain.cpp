@@ -8,12 +8,12 @@
 
 using namespace pqxx;
 
-Block::Block(std::string prevhash, std::string Data, int difficulty, std::string& miningResult) {
+Block::Block(std::string prevhash, std::string Data, int difficulty, std::string& miningResult, int& totalHashTime) {
     this->prevHash = prevhash;
     std::string returnHash;
     
     Mining mineIt(8, difficulty);
-    this->nonce = mineIt.mineBlock(prevHash, Data, returnHash, miningResult);
+    this->nonce = mineIt.mineBlock(prevHash, Data, returnHash, miningResult, totalHashTime);
     this->data = Data;
     this->transactions = time(0);  
     next = nullptr;

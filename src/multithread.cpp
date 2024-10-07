@@ -19,7 +19,7 @@ Mining::Mining(int numThreads, int difficulty){
 
 }
 
-void Mining::threading(int threadNum, atomic<int>& sharedNonce, const string& prevHash, const string& data, string& resultMessage) {
+void Mining::threading(int threadNum, atomic<int>& sharedNonce, const string& prevHash, const string& data, string& resultMessage, int& totalHashTime) {
     string tempHash;
     
     auto startTimer = chrono::high_resolution_clock::now();
@@ -33,6 +33,7 @@ void Mining::threading(int threadNum, atomic<int>& sharedNonce, const string& pr
             if (!done.load()) {
                 auto endTimer = chrono::high_resolution_clock::now();  
                 auto totalTime = chrono::duration_cast<std::chrono::milliseconds>(endTimer - startTimer);
+                totalHashTime = totalTime;
                 done = true;
                 nonceFound = nonce;
                 hashFound = tempHash;
@@ -45,7 +46,7 @@ void Mining::threading(int threadNum, atomic<int>& sharedNonce, const string& pr
     }
 }
 
-int Mining::mineBlock(string prevHash, string data, string& returnHash, string& resultMessage){
+int Mining::mineBlock(string prevHash, string data, string& returnHash, string& resultMessage, int& totalHashTime){
     vector<thread> threads;
     atomic<int> sharedNonce(0);
     int nonce = 0;

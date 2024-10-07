@@ -22,4 +22,6 @@ int verifyVoters();
 
 std::string tallyVotes();
 
+int averageHashTime();
+
 #endif
