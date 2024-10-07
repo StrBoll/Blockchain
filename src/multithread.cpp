@@ -37,10 +37,10 @@ void Mining::threading(int threadNum, atomic<int>& sharedNonce, const string& pr
                 done = true;
                 nonceFound = nonce;
                 hashFound = tempHash;
-                resultMessage = "Thread #" + to_string(threadNum) + "\n found valid nonce at: " + to_string(nonce) + "\n with hash: " + tempHash + "\n in a total of " + to_string(totalTime) + " seconds.";
+                resultMessage = "Thread #" + to_string(threadNum) + " found valid nonce at: " + to_string(nonce) + "\n Hash: " + tempHash + "\n This operation took " + to_string(totalHashTime) + " seconds.";
 
                 cout << "Thread #" << threadNum << " found valid nonce at: " << nonce 
-                     << " with hash: " << tempHash << endl;
+                     << " with hash: " << tempHash << " with time: " << totalHashTime << endl;
             }
         }
     }
