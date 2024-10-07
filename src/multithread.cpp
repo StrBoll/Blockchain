@@ -3,7 +3,9 @@
 #include <thread>
 #include <vector>
 #include <string>
+#include <chrono>
 #include "openssl/sha.h"
+
 
 using namespace std;
 
@@ -20,6 +22,7 @@ Mining::Mining(int numThreads, int difficulty){
 void Mining::threading(int threadNum, atomic<int>& sharedNonce, const string& prevHash, const string& data, string& resultMessage) {
     string tempHash;
     
+    auto startTimer = chrono::high_resolution_clock::now();
     while (!done.load()) {  
         int nonce = sharedNonce.fetch_add(1);  
         string convert = prevHash + data + to_string(nonce);
@@ -27,11 +30,13 @@ void Mining::threading(int threadNum, atomic<int>& sharedNonce, const string& pr
 
         if (validHash(tempHash)) {
             lock_guard<mutex> lock(resultMtx);  
-            if (!done.load()) {  
+            if (!done.load()) {
+                auto endTimer = chrono::high_resolution_clock::now();  
+                auto totalTime = chrono::duration_cast<std::chrono::milliseconds>(endTimer - startTimer);
                 done = true;
                 nonceFound = nonce;
                 hashFound = tempHash;
-                resultMessage = "Thread #" + to_string(threadNum) + " found valid nonce at: " + to_string(nonce) + " with hash: " + tempHash;
+                resultMessage = "Thread #" + to_string(threadNum) + "\n found valid nonce at: " + to_string(nonce) + "\n with hash: " + tempHash + "\n in a total of " + to_string(totalTime) + " seconds.";
 
                 cout << "Thread #" << threadNum << " found valid nonce at: " << nonce 
                      << " with hash: " << tempHash << endl;
