@@ -115,6 +115,22 @@ const showThreadCount = async () => {
     setHistory((prevHistory) => [...prevHistory, `> Error: ${error.message}`]);
   }
 };
+
+const showAverageTime = async () => {
+  try {
+    const response = await fetch('http://52.14.200.242:18080/avHashTime', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    });
+
+    const result = await response.text();
+    setHistory((prevHistory) => [...prevHistory, `> \n Accessing AWS data.... \n The average hash mining operation was: \n ${result}`]);
+  } catch (error) {
+    setHistory((prevHistory) => [...prevHistory, `> Error: ${error.message}`]);
+  }
+};
   
   
   const handleInputSubmit = (e) => {
@@ -175,7 +191,7 @@ const showThreadCount = async () => {
       setHistory((prevHistory) => [
         ...prevHistory,
         `> ${input}`,
-        "Available commands: \n 'votes\' - display the AWS database of votes' \n 'winning\' - display who\'s leading the polls \n \'blockchain\' - display the blockchain \n \'threads\' - display the thread count \n",
+        "Available commands: \n 'votes\' - display the AWS database of votes' \n 'winning\' - display who\'s leading the polls \n \'blockchain\' - display the blockchain \n \'threads\' - display the thread count \n \'averagetime\' - display real-time hash mining average",
       ]);
     } else if (input.trim() === 'votes') {
       printVotesAwsDatabase();
@@ -185,6 +201,8 @@ const showThreadCount = async () => {
       showTopCandidate();
     }else if (input.trim() === 'threads'){ 
       showThreadCount();
+    } else if(input.trim() === 'averagetime'){
+      showAverageTime();
     } else {
       setHistory((prevHistory) => [
         ...prevHistory,

@@ -169,8 +169,20 @@ int main() {
 
 
 
+app().registerHandler("/avHashTime", [](const HttpRequestPtr &req, std::function<void(const HttpResponsePtr &)> &&callback) {
+    
+        string averageTime = to_string(averageHashTime()) + " seconds";
+        
+        auto resp = HttpResponse::newHttpResponse();
+        resp->addHeader("Access-Control-Allow-Origin", "*");  
+        resp->setBody(averageTime);
+        callback(resp);
+    });
+
 
 
     
     app().addListener("0.0.0.0", 18080).run();
 }
+
+
