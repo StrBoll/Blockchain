@@ -8,7 +8,7 @@ using namespace pqxx;
 using namespace std;
 
 
-void insertBlockDB(const std::string& prevHash, const std::string& hash, int nonce, time_t transactions) {
+void insertBlockDB(const std::string& prevHash, const std::string& hash, int nonce, time_t transactions, int miningTime) {
     try {
         
         connection C("dbname=aws_database user=phillipboll3 password='#NewPassword2024' host=localhost port=5432");
@@ -252,4 +252,48 @@ string tallyVotes(){
         cerr << e.what() << endl;
         return "Could not connect to AWS database";
     }
+}
+
+
+int averageHashTime(){
+
+    try {
+
+        connection C("dbname=aws_database user=phillipboll3 password='#NewPassword2024' host=localhost port=5432");
+        
+        int total = 0;
+        int count = 0;
+        if (C.is_open()){
+
+            nontransaction N(C);
+
+            string command = "SELECT hash_time FROM blocks;";
+
+            Result R(N.exec(command));
+
+            for (auto iter = R.begin(); iter != R.end(); ++iter){
+
+                total += iter["hash_time"].as<int>();
+                count++;
+
+
+
+            }
+
+            int average = total/count;
+
+            return average;
+
+
+
+        } else {
+            cout << "Could not access AWS datbase" << endl;
+            return -1;
+        }
+
+    } catch (const exception &e){
+        cerr << e.what() << endl;
+    }
+
+
 }

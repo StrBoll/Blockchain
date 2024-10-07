@@ -175,7 +175,7 @@ const showThreadCount = async () => {
       setHistory((prevHistory) => [
         ...prevHistory,
         `> ${input}`,
-        "Available commands: \n 'votes\' - display the AWS database of votes' \n 'winning\' - display who\'s leading the polls \n \'blockchain\' - display the blockchain \n ",
+        "Available commands: \n 'votes\' - display the AWS database of votes' \n 'winning\' - display who\'s leading the polls \n \'blockchain\' - display the blockchain \n \'threads\' - display the thread count \n",
       ]);
     } else if (input.trim() === 'votes') {
       printVotesAwsDatabase();

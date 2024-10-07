@@ -6,7 +6,7 @@
 #include "blockchain.h"
 
 
-void insertBlockDB(const std::string &prevHash, const std::string &hash, int nonce, time_t transactions); // inserts new blocks to database
+void insertBlockDB(const std::string &prevHash, const std::string &hash, int nonce, time_t transactions, int miningTime); // inserts new blocks to database
 
 bool blocksPresent(); // checks if blocks are in blockchain 
 
