@@ -32,12 +32,12 @@ void Mining::threading(int threadNum, atomic<int>& sharedNonce, const string& pr
             lock_guard<mutex> lock(resultMtx);  
             if (!done.load()) {
                 auto endTimer = chrono::high_resolution_clock::now();  
-                auto totalTime = chrono::duration_cast<std::chrono::milliseconds>(endTimer - startTimer);
+                auto totalTime = chrono::duration_cast<std::chrono::seconds>(endTimer - startTimer);
                 totalHashTime = static_cast<int>(totalTime.count()); 
                 done = true;
                 nonceFound = nonce;
                 hashFound = tempHash;
-                resultMessage = "Thread #" + to_string(threadNum) + " found valid nonce at: " + to_string(nonce) + "\n Hash: " + tempHash + "\n This operation took " + to_string(totalHashTime) + " seconds.";
+                resultMessage = "\nThread #" + to_string(threadNum) + " found valid nonce at: " + to_string(nonce) + "\n Hash: " + tempHash + "\n This operation took " + to_string(totalHashTime) + " seconds.";
 
                 cout << "Thread #" << threadNum << " found valid nonce at: " << nonce 
                      << " with hash: " << tempHash << " with time: " << totalHashTime << endl;
