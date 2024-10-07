@@ -15,8 +15,10 @@ void insertBlockDB(const std::string& prevHash, const std::string& hash, int non
         
         if (C.is_open()) {
             work W(C);
-            string data = "INSERT INTO blocks (previous_hash, current_hash, nonce, transaction_time) "
-            "VALUES ('" + prevHash + "', '" + hash + "', " + to_string(nonce) + ", to_timestamp(" + to_string(transactions) + "));";
+            
+            string data = "INSERT INTO blocks (previous_hash, current_hash, nonce, transaction_time, hash_time) "
+            "VALUES ('" + prevHash + "', '" + hash + "', " + to_string(nonce) + ", to_timestamp(" + to_string(transactions) + "), " + to_string(miningTime) + ");";
+
 
             
             W.exec(data);
@@ -294,6 +296,7 @@ int averageHashTime(){
     } catch (const exception &e){
         cerr << e.what() << endl;
     }
+
 
 
 }
